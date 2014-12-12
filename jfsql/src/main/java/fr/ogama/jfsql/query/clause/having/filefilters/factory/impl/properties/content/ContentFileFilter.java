@@ -1,0 +1,44 @@
+package fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.content;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.AbstractFileFilter;
+import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.Operators;
+import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.FilePropertyHelper;
+
+public class ContentFileFilter extends AbstractFileFilter {
+
+	private List<String> contents;
+	
+	public ContentFileFilter(List<String> contents) {
+		this.contents = contents;
+	}
+	
+	@Override
+	protected boolean acceptFile(File file, String name) {		
+		try {
+			if (file.isDirectory()) {
+				return false;
+			}
+
+			getOperator().getObjects().addAll(contents);
+			getOperator().getObjects().add(FilePropertyHelper.getContent(file));
+			return getOperator().execute();
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	@Override
+	protected void setAllowedOperators() {
+		addSupportedOperator(Operators.EQUAL);
+		addSupportedOperator(Operators.UNEQUAL);
+		addSupportedOperator(Operators.LIKE);
+		addSupportedOperator(Operators.IN);
+	}
+
+}
