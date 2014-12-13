@@ -9,19 +9,19 @@ import java.util.List;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
-import fr.ogama.jfsql.query.clause.FindClause;
+import fr.ogama.jfsql.query.clause.GetClause;
 import fr.ogama.jfsql.query.clause.HavingClause;
 import fr.ogama.jfsql.query.clause.InClause;
 import fr.ogama.jfsql.query.clause.RestrictionClause;
 
 public class QueryImpl implements Query {
 
-	private FindClause findClause;
+	private GetClause findClause;
 	private InClause inClause;
 	private HavingClause havingClause;
 	private List<RestrictionClause> restrictionClauses;
 
-	public QueryImpl(FindClause findClause,
+	public QueryImpl(GetClause findClause,
 			List<RestrictionClause> restrictionClauses, InClause inClause,
 			HavingClause havingClause) {
 		this.findClause = findClause;

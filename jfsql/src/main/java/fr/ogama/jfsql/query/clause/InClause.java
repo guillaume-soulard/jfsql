@@ -4,5 +4,5 @@ import java.io.File;
 import java.util.List;
 
 public interface InClause extends Clause {
-	public List<File> getFiles();
+	public List<File> getFiles() throws ClauseException;
 }

@@ -16,11 +16,11 @@ import org.gibello.zql.ZQuery;
 import org.gibello.zql.ZStatement;
 import org.gibello.zql.ZqlParser;
 
-import fr.ogama.jfsql.query.clause.FindClause;
+import fr.ogama.jfsql.query.clause.GetClause;
 import fr.ogama.jfsql.query.clause.HavingClause;
 import fr.ogama.jfsql.query.clause.InClause;
 import fr.ogama.jfsql.query.clause.RestrictionClause;
-import fr.ogama.jfsql.query.clause.find.FindClauseFactory;
+import fr.ogama.jfsql.query.clause.get.GetClauseFactory;
 import fr.ogama.jfsql.query.clause.having.HavingClauseImpl;
 import fr.ogama.jfsql.query.clause.having.operators.ComparaisonIdentificator;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.ComparatorOperator;
@@ -36,7 +36,7 @@ public class QueryFactory {
 	public static Query newQuery(String query) throws Exception {
 		QueryClause queryClause = getClauses(query);
 
-		Pair<FindClause, List<RestrictionClause>> findClause = parseFind(queryClause
+		Pair<GetClause, List<RestrictionClause>> findClause = parseFind(queryClause
 				.getFindClause());
 		InClause inClause = parseIn(queryClause.getInClause());
 		HavingClause havingClause = parseHaving(queryClause.getHavingClause());		
@@ -77,7 +77,7 @@ public class QueryFactory {
 		}
 	}
 
-	private static Pair<FindClause, List<RestrictionClause>> parseFind(
+	private static Pair<GetClause, List<RestrictionClause>> parseFind(
 			String find) throws Exception {
 		String regexp = Properties
 				.getProperty(Properties.QUERY_READ_STATEMENT_FIND);
@@ -87,7 +87,7 @@ public class QueryFactory {
 		Matcher matcher = JFSQLUtils.executeRegexp(pattern, find);
 
 		List<RestrictionClause> restrictionClauses = new ArrayList<RestrictionClause>();
-		FindClause findClause = null;
+		GetClause findClause = null;
 
 		if (matcher.matches()) {
 			String limit = matcher.group("limit");
@@ -103,11 +103,11 @@ public class QueryFactory {
 
 			String selector = matcher.group("selector");
 			if (selector != null) {
-				findClause = FindClauseFactory.getClause(selector);
+				findClause = GetClauseFactory.getInstance().getClause(selector);
 			}
 		}
 
-		return new Pair<FindClause, List<RestrictionClause>>(findClause,
+		return new Pair<GetClause, List<RestrictionClause>>(findClause,
 				restrictionClauses);
 	}
 

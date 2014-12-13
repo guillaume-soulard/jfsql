@@ -4,5 +4,7 @@ import java.io.File;
 import java.util.List;
 
 public interface RestrictionClause {
-	public boolean canSelect(FindClause findClause, File file, List<File> selectableFile, List<Comparable> selectedObjects);
+	public boolean canSelect(GetClause findClause, File file,
+			List<File> selectableFile, List<Comparable> selectedObjects)
+			throws ClauseException;
 }

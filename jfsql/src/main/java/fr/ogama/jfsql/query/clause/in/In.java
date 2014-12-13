@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.ogama.jfsql.query.clause.ClauseException;
 import fr.ogama.jfsql.query.clause.InClause;
 
 public class In implements InClause {
@@ -13,12 +14,8 @@ public class In implements InClause {
 	public In(String ...paths) {
 		this.paths = paths;
 	}
-	
-	public String getName() {
-		return "in";
-	}
 
-	public List<File> getFiles() {
+	public List<File> getFiles() throws ClauseException {
 		List<File> files = new ArrayList<File>(paths.length);
 		
 		for (String path : paths) {
