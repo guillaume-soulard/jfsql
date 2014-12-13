@@ -19,6 +19,16 @@ public class In implements InClause {
 		List<File> files = new ArrayList<File>(paths.length);
 		
 		for (String path : paths) {
+			File in = new File(path);
+			
+			if (!in.exists()) {
+				throw new ClauseException(path + " not exist");
+			}
+			
+			if (!in.isDirectory()) {
+				throw new ClauseException(path + " is a file");
+			}
+			
 			files.add(new File(path));
 		}
 		

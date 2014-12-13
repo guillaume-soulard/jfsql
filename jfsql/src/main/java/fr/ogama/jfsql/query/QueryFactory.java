@@ -36,7 +36,7 @@ public class QueryFactory {
 	public static Query newQuery(String query) throws Exception {
 		QueryClause queryClause = getClauses(query);
 
-		Pair<GetClause, List<RestrictionClause>> findClause = parseFind(queryClause
+		Pair<GetClause, List<RestrictionClause>> findClause = parseGet(queryClause
 				.getFindClause());
 		InClause inClause = parseIn(queryClause.getInClause());
 		HavingClause havingClause = parseHaving(queryClause.getHavingClause());		
@@ -77,7 +77,7 @@ public class QueryFactory {
 		}
 	}
 
-	private static Pair<GetClause, List<RestrictionClause>> parseFind(
+	private static Pair<GetClause, List<RestrictionClause>> parseGet(
 			String find) throws Exception {
 		String regexp = Properties
 				.getProperty(Properties.QUERY_READ_STATEMENT_FIND);
@@ -121,13 +121,17 @@ public class QueryFactory {
 
 		while (hasPaths) {
 			Matcher matcher = JFSQLUtils.executeRegexp(pattern, in);
-			if (matcher.matches()) {
+			if (matcher.find()) {
 				String path = matcher.group("directory");
 				paths.add(path);
 				in = in.replaceFirst("'" + path + "'", "");
 			} else {
 				hasPaths = false;
 			}
+		}
+		
+		if (paths.size() == 0) {
+			throw new Exception("Error in '" + in + "'");
 		}
 
 		return new In(paths.toArray(new String[] {}));

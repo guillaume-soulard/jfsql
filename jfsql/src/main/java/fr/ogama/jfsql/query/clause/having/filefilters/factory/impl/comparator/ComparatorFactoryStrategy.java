@@ -20,6 +20,7 @@ import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.cr
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.lastaccessdate.LastAccessDateFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.lastmodificationdate.LastModificationFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.name.NameFileFilterFactory;
+import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.owner.OwnerFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.parent.ParentFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.path.PathFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.size.SizeFileFilterFactory;
@@ -60,6 +61,7 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 		propertyStrategy.put("creation_date", new CreationDateFileFilterFactory());
 		propertyStrategy.put("last_update_date", new LastModificationFileFilterFactory());
 		propertyStrategy.put("last_access_date", new LastAccessDateFileFilterFactory());
+		propertyStrategy.put("owner", new OwnerFileFilterFactory());
 		
 	}
 

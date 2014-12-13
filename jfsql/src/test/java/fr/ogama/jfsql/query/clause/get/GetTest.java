@@ -1,0 +1,278 @@
+package fr.ogama.jfsql.query.clause.get;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import fr.ogama.jfsql.query.Query;
+import fr.ogama.jfsql.query.QueryFactory;
+
+public class GetTest {
+
+	private String getTestDirectory;
+
+	private File folder1;
+	private File folder11;
+	private File folder2;
+	private File file1;
+	private File file2;
+
+	@Before
+	public void setup() {
+		getTestDirectory = System.getProperty("user.dir");
+		getTestDirectory += "/src/test/resources/getTestFolder";
+
+		folder1 = new File(getTestDirectory + "/Folder 1");
+		folder11 = new File(getTestDirectory + "/Folder 1/Folder 1.1");
+		folder2 = new File(getTestDirectory + "/Folder 2");
+		file1 = new File(getTestDirectory + "/Folder 1/Folder 1.1/File 1.txt");
+		file2 = new File(getTestDirectory + "/Folder 2/File 2.xml");
+
+		assertThat(folder1).isNotNull().exists().isDirectory();
+		assertThat(folder11).isNotNull().exists().isDirectory();
+		assertThat(folder2).isNotNull().exists().isDirectory();
+		assertThat(file1).isNotNull().exists().isFile();
+		assertThat(file2).isNotNull().exists().isFile();
+
+	}
+
+	@Test
+	public void should_get_files_and_directories() throws Exception {
+		// GIVEN
+		String file = "get file in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(file);
+
+		String directory = "get directory in ('" + getTestDirectory + "')";
+		Query directoryQuery = QueryFactory.newQuery(directory);
+
+		String fileOrDirectory = "get file or directory in ('"
+				+ getTestDirectory + "')";
+		Query fileOrDirectoryQuery = QueryFactory.newQuery(fileOrDirectory);
+
+		// WHEN
+		List<Comparable> fileResults = fileQuery.execute();
+		List<Comparable> directoryResults = directoryQuery.execute();
+		List<Comparable> fileOrDirectoryResults = fileOrDirectoryQuery
+				.execute();
+
+		// THEN
+		assertThat(fileResults).isNotNull().isNotEmpty();
+		assertThat(directoryResults).isNotNull().isNotEmpty();
+		assertThat(fileOrDirectoryResults).isNotNull().isNotEmpty();
+
+		assertThat(fileResults).hasOnlyElementsOfType(File.class);
+		assertThat(directoryResults).hasOnlyElementsOfType(File.class);
+		assertThat(fileOrDirectoryResults).hasOnlyElementsOfType(File.class);
+
+		assertThat(fileOrDirectoryResults).hasSize(
+				fileResults.size() + directoryResults.size());
+		assertThat(fileOrDirectoryResults).containsOnly(folder1, folder11,
+				folder2, file1, file2);
+
+		for (Comparable result : fileOrDirectoryResults) {
+			assertThat(((File) result)).exists();
+		}
+	}
+
+	@Test
+	public void should_get_only_files() throws Exception {
+		// GIVEN
+		String query = "get file in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(File.class);
+		assertThat(results).containsOnly(file1, file2);
+
+		for (Comparable result : results) {
+			assertThat(((File) result)).exists();
+			assertThat(((File) result)).isFile();
+		}
+	}
+
+	@Test
+	public void should_get_only_directories() throws Exception {
+		// GIVEN
+		String query = "get directory in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(File.class);
+		assertThat(results).containsOnly(folder1, folder11, folder2);
+
+		for (Comparable result : results) {
+			assertThat(((File) result)).exists();
+			assertThat(((File) result)).isDirectory();
+		}
+	}
+
+	@Test
+	public void should_get_names() throws Exception {
+		// GIVEN
+		String query = "get name in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+		assertThat(results).containsOnly(folder1.getName(), folder11.getName(),
+				folder2.getName(), file1.getName(), file2.getName());
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+		}
+	}
+
+	@Test
+	public void should_get_parent() throws Exception {
+		// GIVEN
+		String query = "get parent in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+		assertThat(results).containsOnly(folder1.getParentFile().getName(),
+				folder11.getParentFile().getName(),
+				folder2.getParentFile().getName(),
+				file1.getParentFile().getName(),
+				file2.getParentFile().getName());
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+		}
+	}
+
+	@Test
+	public void should_get_path() throws Exception {
+		// GIVEN
+		String query = "get path in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+		assertThat(results).containsOnly(folder1.getPath(), folder11.getPath(),
+				folder2.getPath(), file1.getPath(), file2.getPath());
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+			assertThat(new File((String) result)).exists();
+		}
+	}
+	
+	@Test
+	public void should_get_creation_date() throws Exception {
+		// GIVEN
+		String query = "get creation_date in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+			assertThat((String) result).matches("[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+		}
+	}
+	
+	@Test
+	public void should_get_last_update_date() throws Exception {
+		// GIVEN
+		String query = "get last_update_date in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+			assertThat((String) result).matches("[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+		}
+	}
+	
+	@Test
+	public void should_get_last_access_date() throws Exception {
+		// GIVEN
+		String query = "get last_access_date in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+			assertThat((String) result).matches("[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+		}
+	}
+	
+	@Test
+	public void should_get_size() throws Exception {
+		// GIVEN
+		String query = "get size in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(Long.class);
+
+		for (Comparable result : results) {
+			assertThat((Long) result).isNotNull().isGreaterThanOrEqualTo(0L);
+		}
+	}
+	
+	@Test
+	public void should_get_owner() throws Exception {
+		// GIVEN
+		String query = "get owner in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+		}
+	}
+}

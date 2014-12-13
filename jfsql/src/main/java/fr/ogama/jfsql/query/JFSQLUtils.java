@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public final class JFSQLUtils {
 	
-	public static String datePattern = "yyyy/MM/dd hh:mm:ss";
+	public static String datePattern = "yyyy/MM/dd HH:mm:ss";
 	
 	public static Matcher executeRegexp(Pattern pattern, String string) {
 		string = string.replaceAll("\\\\", "/");
@@ -24,5 +24,9 @@ public final class JFSQLUtils {
 	
 	public static Date parseDateFromCurrentLocal(String date) throws ParseException {  
 		return new SimpleDateFormat(datePattern).parse(date);		
+	}
+	
+	public static String dateToString(Date date) {
+		return new SimpleDateFormat(datePattern).format(date);
 	}
 }

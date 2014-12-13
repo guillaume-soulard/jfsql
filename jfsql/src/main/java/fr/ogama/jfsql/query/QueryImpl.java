@@ -54,7 +54,7 @@ public class QueryImpl implements Query {
 			}
 
 			if (!canSelectMore) {
-				break;
+				continue;
 			}
 			Comparable selected = findClause.select(file);
 			if (selected != null) {
