@@ -9,7 +9,7 @@ public class Properties {
 	public final static String QUERY_READ_STATEMENT_GENERAL = "query.read.statement.general";
 	public final static String QUERY_READ_STATEMENT_FIND = "query.read.statement.find";
 	public final static String QUERY_READ_STATEMENT_IN = "query.read.statement.in";
-	public final static String QUERY_READ_STATEMENT_HAVING = "query.read.statement.having";
+	public final static String QUERY_READ_STATEMENT_SORT = "query.read.statement.sort";
 
 	public final static String QUERY_READ_STATEMENT_HAVING_EQUAL = "query.read.statement.having.equal";
 	public final static String QUERY_READ_STATEMENT_HAVING_LIKE = "query.read.statement.having.like";

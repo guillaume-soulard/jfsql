@@ -67,6 +67,9 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 
 	public IOFileFilter getFileFilter(ZExpression expression) {
 		try {
+			String operator = expression.getOperator().toLowerCase();
+			operator = operator.trim().replaceAll("[ ]?not[ ]?", "");
+			
 			List<ZConstant> constants = new ArrayList<ZConstant>();
 			for (ZExp exp : (Vector<ZExp>) expression.getOperands()) {
 				if (exp instanceof ZConstant) {
@@ -76,7 +79,7 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 
 			if (constants.size() >= 2) {
 				ComparatorOperator comparatorOperator = operatorStrategy.get(
-						expression.getOperator().toLowerCase()).newInstance();
+						operator).newInstance();
 				
 				PropertyFileFilter propertyFileFilter =  propertyStrategy.get(
 						constants.get(0).getValue().toLowerCase()).getPropertyFileFilter(constants.subList(1, constants.size()));

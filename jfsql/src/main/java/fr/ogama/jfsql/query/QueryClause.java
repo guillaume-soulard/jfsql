@@ -4,6 +4,7 @@ public class QueryClause {
 	private String findClause;
 	private String inClause;
 	private String havingClause;
+	private Integer deepClause;
 	
 	public QueryClause() {
 		
@@ -30,5 +31,13 @@ public class QueryClause {
 	
 	public void setHavingClause(String havingClause) {
 		this.havingClause = havingClause;
+	}
+	
+	public Integer getDeepClause() {
+		return deepClause;
+	}
+	
+	public void setDeepClause(Integer deepClause) {
+		this.deepClause = deepClause;
 	}
 }

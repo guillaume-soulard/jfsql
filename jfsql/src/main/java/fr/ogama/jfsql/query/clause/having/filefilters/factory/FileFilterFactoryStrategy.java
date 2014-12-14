@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 import org.gibello.zql.ZExpression;
 
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.comparator.ComparatorFactoryStrategy;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.logical.AndFileFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.logical.NotFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.logical.OrFileFilterFactory;
+import fr.ogama.jfsql.query.clause.having.operators.logic.Not;
 
 public class FileFilterFactoryStrategy {
 	
@@ -42,13 +44,22 @@ public class FileFilterFactoryStrategy {
 		return instance;
 	}
 	
-	public IOFileFilter getFileFilter(ZExpression expression) {
-		FileFilterFactory fileFilterFactory = strategy.get(expression.getOperator().toLowerCase());
+	public IOFileFilter getFileFilter(ZExpression expression) {		
+		String operator = expression.getOperator().toLowerCase();
+		boolean hasNotOperator = operator.contains("not");
+		operator = operator.trim().replaceAll("[ ]?not[ ]?", "");
 		
+		FileFilterFactory fileFilterFactory = strategy.get(operator);
+		IOFileFilter fileFilter = null;
+				
 		if (fileFilterFactory != null) {
-			return fileFilterFactory.getFileFilter(expression);
-		}
+			fileFilter = fileFilterFactory.getFileFilter(expression);
+			
+			if (hasNotOperator) {
+				fileFilter = new NotFileFilter(fileFilter);
+			}
+		}		
 		
-		return null;
+		return fileFilter;
 	}
 }

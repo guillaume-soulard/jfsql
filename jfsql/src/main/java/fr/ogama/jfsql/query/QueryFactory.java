@@ -2,6 +2,7 @@ package fr.ogama.jfsql.query;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +21,7 @@ import fr.ogama.jfsql.query.clause.GetClause;
 import fr.ogama.jfsql.query.clause.HavingClause;
 import fr.ogama.jfsql.query.clause.InClause;
 import fr.ogama.jfsql.query.clause.RestrictionClause;
+import fr.ogama.jfsql.query.clause.SortClause;
 import fr.ogama.jfsql.query.clause.get.GetClauseFactory;
 import fr.ogama.jfsql.query.clause.having.HavingClauseImpl;
 import fr.ogama.jfsql.query.clause.having.operators.ComparaisonIdentificator;
@@ -30,6 +32,7 @@ import fr.ogama.jfsql.query.clause.having.operators.logic.Or;
 import fr.ogama.jfsql.query.clause.in.In;
 import fr.ogama.jfsql.query.clause.restriction.RestrictionDistinct;
 import fr.ogama.jfsql.query.clause.restriction.RestrictionLimit;
+import fr.ogama.jfsql.query.clause.sort.SortFactory;
 
 public class QueryFactory {
 
@@ -39,9 +42,12 @@ public class QueryFactory {
 		Pair<GetClause, List<RestrictionClause>> findClause = parseGet(queryClause
 				.getFindClause());
 		InClause inClause = parseIn(queryClause.getInClause());
-		HavingClause havingClause = parseHaving(queryClause.getHavingClause());		
+		HavingClause havingClause = parseHaving(queryClause.getHavingClause());
+		SortClause sortClause = parseSortClauseOnHaving(queryClause
+				.getHavingClause());
+
 		return new QueryImpl(findClause.getObject1(), findClause.getObject2(),
-				inClause, havingClause);
+				inClause, havingClause, sortClause, queryClause.getDeepClause());
 	}
 
 	private static QueryClause getClauses(String query) throws Exception {
@@ -56,6 +62,7 @@ public class QueryFactory {
 				String findStatement = matcher.group("findStatement");
 				String inStatement = matcher.group("inStatement");
 				String havingStatement = matcher.group("havingStatement");
+				String deepStatement = matcher.group("deepStatement");
 
 				if (findStatement != null && inStatement != null) {
 					QueryClause queryClause = new QueryClause();
@@ -67,6 +74,17 @@ public class QueryFactory {
 					queryClause
 							.setHavingClause(havingStatement != null ? havingStatement
 									: "");
+					if (deepStatement != null) {
+						if (deepStatement.equals("infinite")) {
+							queryClause.setDeepClause(Integer.MAX_VALUE);
+						} else {
+							queryClause.setDeepClause(Integer
+									.valueOf(deepStatement));
+						}
+					} else {
+						queryClause.setDeepClause(Integer.MAX_VALUE);
+					}
+
 					return queryClause;
 				}
 			}
@@ -77,8 +95,8 @@ public class QueryFactory {
 		}
 	}
 
-	private static Pair<GetClause, List<RestrictionClause>> parseGet(
-			String find) throws Exception {
+	private static Pair<GetClause, List<RestrictionClause>> parseGet(String find)
+			throws Exception {
 		String regexp = Properties
 				.getProperty(Properties.QUERY_READ_STATEMENT_FIND);
 		Pattern pattern = Pattern.compile(regexp, Pattern.MULTILINE
@@ -129,7 +147,7 @@ public class QueryFactory {
 				hasPaths = false;
 			}
 		}
-		
+
 		if (paths.size() == 0) {
 			throw new Exception("Error in '" + in + "'");
 		}
@@ -149,6 +167,24 @@ public class QueryFactory {
 					return new HavingClauseImpl(
 							(ZExpression) ((ZQuery) statement).getWhere());
 				}
+			}
+		}
+		return null;
+	}
+
+	private static SortClause parseSortClauseOnHaving(String having)
+			throws Exception {
+		if (having != null && !having.isEmpty()) {
+			String regex = Properties
+					.getProperty(Properties.QUERY_READ_STATEMENT_SORT);
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = JFSQLUtils.executeRegexp(pattern, having);
+
+			if (matcher.find()) {
+				String sortProperty = matcher.group("sortByProperty");
+				String sortOrder = matcher.group("sortByOrder");
+
+				return new SortFactory().getSortClause(sortProperty, sortOrder);
 			}
 		}
 		return null;
