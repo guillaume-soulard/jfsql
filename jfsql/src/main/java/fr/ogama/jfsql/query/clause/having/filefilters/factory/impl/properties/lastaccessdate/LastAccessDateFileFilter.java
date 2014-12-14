@@ -19,7 +19,7 @@ public class LastAccessDateFileFilter extends AbstractFileFilter {
 	@Override
 	protected boolean acceptFile(File file, String name) {
 		try {
-			getOperator().getObjects().add(FilePropertyHelper.getLastAccessDate(file));
+			getOperator().setObjectToCompare(FilePropertyHelper.getLastAccessDate(file));
 			getOperator().getObjects().addAll(lastAccessDates);
 			return getOperator().execute();
 		} catch (Exception e) {

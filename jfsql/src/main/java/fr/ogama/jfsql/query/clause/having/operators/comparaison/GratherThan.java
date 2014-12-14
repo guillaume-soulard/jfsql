@@ -8,12 +8,10 @@ public class GratherThan extends AbstractComparatorOperator {
 		super();
 	}
 	
-	public boolean execute() {
-		Comparable objectToCompare = getObjects().get(0);
-		List<Comparable> listToSearch = getObjects().subList(1, getObjects().size());		
+	public boolean execute() {	
 		
-		for (Comparable comparable : listToSearch) {
-			if (comparable.compareTo(objectToCompare) > 0) {
+		for (Comparable comparable : getObjects()) {
+			if (getObjectToCompare().compareTo(comparable) > 0) {
 				return true;
 			}
 		}

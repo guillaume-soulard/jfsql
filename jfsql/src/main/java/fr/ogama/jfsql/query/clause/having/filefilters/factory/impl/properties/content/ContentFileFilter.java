@@ -26,7 +26,7 @@ public class ContentFileFilter extends AbstractFileFilter {
 			}
 
 			getOperator().getObjects().addAll(contents);
-			getOperator().getObjects().add(FilePropertyHelper.getContent(file));
+			getOperator().setObjectToCompare(FilePropertyHelper.getContent(file));
 			return getOperator().execute();
 		} catch (IOException e) {
 			return false;

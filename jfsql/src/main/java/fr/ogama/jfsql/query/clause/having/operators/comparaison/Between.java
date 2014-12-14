@@ -7,17 +7,16 @@ public class Between extends AbstractComparatorOperator {
 	}
 	
 	public boolean execute() {
-		if (getObjects().size() == 3) {
-			Comparable object = getObjects().get(0);
-			Comparable object1 = getObjects().get(1);
-			Comparable object2 = getObjects().get(2);
+		if (getObjects().size() == 2) {
+			Comparable object1 = getObjects().get(0);
+			Comparable object2 = getObjects().get(1);
 			
-			if (object.compareTo(object1) >= 0 && object.compareTo(object2) <= 0) {
+			if (getObjectToCompare().compareTo(object1) >= 0 && getObjectToCompare().compareTo(object2) <= 0) {
 				return true;
 			}
 			
-			if (object.compareTo(object2) >= 0
-					&& object.compareTo(object1) <= 0) {
+			if (getObjectToCompare().compareTo(object2) >= 0
+					&& getObjectToCompare().compareTo(object1) <= 0) {
 				return true;
 			}
 		}

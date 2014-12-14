@@ -8,4 +8,6 @@ public interface ComparatorOperator extends Operator {
 	public List<Comparable> getObjects();
 
 	public void setObjects(List<Comparable> objects);
+	
+	public void setObjectToCompare(Comparable objectToCompare);
 }

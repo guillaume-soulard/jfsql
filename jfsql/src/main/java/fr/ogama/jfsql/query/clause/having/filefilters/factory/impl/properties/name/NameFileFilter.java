@@ -17,7 +17,7 @@ public class NameFileFilter extends AbstractFileFilter {
 	
 	@Override
 	protected boolean acceptFile(File file, String name) {
-		getOperator().getObjects().add(file.getName());
+		getOperator().setObjectToCompare(file.getName());
 		getOperator().getObjects().addAll(names);
 		return getOperator().execute();
 	}

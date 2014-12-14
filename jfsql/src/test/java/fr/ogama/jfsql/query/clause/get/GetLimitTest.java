@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.ogama.jfsql.query.Query;
@@ -14,10 +15,10 @@ import fr.ogama.jfsql.query.QueryFactory;
 
 public class GetLimitTest {
 
-	private String getTestDirectory;
+	private static String getTestDirectory;
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		getTestDirectory = System.getProperty("user.dir");
 		getTestDirectory += "/src/test/resources/getTestFolder";
 	}

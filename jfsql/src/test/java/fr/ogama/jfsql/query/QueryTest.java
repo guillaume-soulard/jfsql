@@ -85,7 +85,7 @@ public class QueryTest {
 	public void should_return_one_file_with_complex_having__clause() throws Exception {
 		Query query = QueryFactory.newQuery("get file in ('" + directory +"') having parent like 'Level' and (name like 'File' or content like 'Content')");
 		List<Comparable> objects = query.execute();
-		assertThat(objects).isNotNull().hasSize(1);
+		assertThat(objects).isNotNull().hasSize(4);
 		assertThat(objects).hasOnlyElementsOfType(File.class);
 	}
 }

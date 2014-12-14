@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.ogama.jfsql.query.Query;
@@ -14,16 +15,16 @@ import fr.ogama.jfsql.query.QueryFactory;
 
 public class GetDistinctTest {
 
-	private String getTestDirectory;
+	private static String getTestDirectory;
 
-	private File folder1;
-	private File folder11;
-	private File folder2;
-	private File file1;
-	private File file2;
+	private static File folder1;
+	private static File folder11;
+	private static File folder2;
+	private static File file1;
+	private static File file2;
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		getTestDirectory = System.getProperty("user.dir");
 		getTestDirectory += "/src/test/resources/getTestFolder";
 

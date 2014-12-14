@@ -16,7 +16,7 @@ public class PathFileFilter extends AbstractFileFilter {
 
 	@Override
 	protected boolean acceptFile(File file, String name) {
-		getOperator().getObjects().add(file.getPath().replaceAll("\\\\", "/"));
+		getOperator().setObjectToCompare(file.getPath().replaceAll("\\\\", "/"));
 		getOperator().getObjects().addAll(paths);
 		return getOperator().execute();
 	}

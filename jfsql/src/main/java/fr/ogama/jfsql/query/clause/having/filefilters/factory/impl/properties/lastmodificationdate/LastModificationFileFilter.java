@@ -19,7 +19,7 @@ public class LastModificationFileFilter extends AbstractFileFilter {
 	@Override
 	protected boolean acceptFile(File file, String name) {
 		try {
-			getOperator().getObjects().add(FilePropertyHelper.getLastModificationDate(file));
+			getOperator().setObjectToCompare(FilePropertyHelper.getLastModificationDate(file));
 			getOperator().getObjects().addAll(lastmodificationDates);
 			return getOperator().execute();
 		} catch (Exception e) {

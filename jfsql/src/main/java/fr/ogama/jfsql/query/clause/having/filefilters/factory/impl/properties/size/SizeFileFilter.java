@@ -18,7 +18,7 @@ public class SizeFileFilter extends AbstractFileFilter {
 	@Override
 	protected boolean acceptFile(File file, String name) {
 		try {
-			getOperator().getObjects().add(FilePropertyHelper.getSize(file));
+			getOperator().setObjectToCompare(FilePropertyHelper.getSize(file));
 			getOperator().getObjects().addAll(sizes);
 			return getOperator().execute();
 		} catch (Exception e) {

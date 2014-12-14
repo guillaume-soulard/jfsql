@@ -18,7 +18,7 @@ public class OwnerFileFilter extends AbstractFileFilter {
 	@Override
 	protected boolean acceptFile(File file, String name) {
 		try {
-			getOperator().getObjects().add(FilePropertyHelper.getOwner(file));
+			getOperator().setObjectToCompare(FilePropertyHelper.getOwner(file));
 			getOperator().getObjects().addAll(owners);
 			return getOperator().execute();
 		} catch (Exception e) {

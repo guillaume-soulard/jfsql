@@ -10,6 +10,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileOwnerAttributeView;
 import java.util.Date;
 
+import fr.ogama.jfsql.query.JFSQLUtils;
+
 public final class FilePropertyHelper {
 
 	public static String getContent(File file) throws IOException {
@@ -19,7 +21,7 @@ public final class FilePropertyHelper {
 	public static Date getCreationDate(File file) throws Exception {
 		BasicFileAttributes attributes = getBasicFileAttributeView(file);
 		if (attributes != null) {
-			return new Date(attributes.creationTime().toMillis());
+			return JFSQLUtils.parseDateFromCurrentLocal(JFSQLUtils.dateToString(new Date(attributes.creationTime().toMillis())));
 		}
 
 		throw new Exception();
@@ -28,7 +30,7 @@ public final class FilePropertyHelper {
 	public static Date getLastAccessDate(File file) throws Exception {
 		BasicFileAttributes attributes = getBasicFileAttributeView(file);
 		if (attributes != null) {
-			return new Date(attributes.lastAccessTime().toMillis());
+			return JFSQLUtils.parseDateFromCurrentLocal(JFSQLUtils.dateToString(new Date(attributes.lastAccessTime().toMillis())));
 		}
 
 		throw new Exception();
@@ -37,7 +39,7 @@ public final class FilePropertyHelper {
 	public static Date getLastModificationDate(File file) throws Exception {
 		BasicFileAttributes attributes = getBasicFileAttributeView(file);
 		if (attributes != null) {
-			return new Date(attributes.lastModifiedTime().toMillis());
+			return JFSQLUtils.parseDateFromCurrentLocal(JFSQLUtils.dateToString(new Date(attributes.lastModifiedTime().toMillis())));
 		}
 
 		throw new Exception();
@@ -56,7 +58,7 @@ public final class FilePropertyHelper {
 		Path path = Paths.get(file.getPath());
         FileOwnerAttributeView attributes = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
         if (attributes != null) {
-        	return attributes.getOwner().getName();
+        	return attributes.getOwner().getName().replaceAll("\\\\", "/");
         }
 		throw new Exception();
 	}

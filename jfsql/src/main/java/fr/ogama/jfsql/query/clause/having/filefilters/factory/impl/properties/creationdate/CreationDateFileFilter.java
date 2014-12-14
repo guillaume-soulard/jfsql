@@ -19,7 +19,7 @@ public class CreationDateFileFilter extends AbstractFileFilter {
 	@Override
 	protected boolean acceptFile(File file, String name) {
 		try {
-			getOperator().getObjects().add(FilePropertyHelper.getCreationDate(file));
+			getOperator().setObjectToCompare(FilePropertyHelper.getCreationDate(file));
 			getOperator().getObjects().addAll(creationsDates);
 			return getOperator().execute();
 		} catch (Exception e) {

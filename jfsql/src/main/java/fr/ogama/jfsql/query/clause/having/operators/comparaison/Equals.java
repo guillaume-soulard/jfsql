@@ -1,6 +1,5 @@
 package fr.ogama.jfsql.query.clause.having.operators.comparaison;
 
-import java.util.List;
 
 public class Equals extends AbstractComparatorOperator {
 
@@ -9,11 +8,9 @@ public class Equals extends AbstractComparatorOperator {
 	}
 	
 	public boolean execute() {		
-		Comparable objectToCompare = getObjects().get(0);
-		List<Comparable> listToSearch = getObjects().subList(1, getObjects().size());		
 		
-		for (Comparable comparable : listToSearch) {
-			if (comparable.compareTo(objectToCompare) == 0) {
+		for (Comparable comparable : getObjects()) {
+			if (comparable.compareTo(getObjectToCompare()) == 0) {
 				return true;
 			}
 		}

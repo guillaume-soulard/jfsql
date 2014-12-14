@@ -17,7 +17,7 @@ public class ParentFileFilter extends AbstractFileFilter {
 	@Override
 	protected boolean acceptFile(File file, String name) {
 		getOperator().getObjects().addAll(parents);
-		getOperator().getObjects().add(file.getParentFile().getName());
+		getOperator().setObjectToCompare(file.getParentFile().getName());
 		return getOperator().execute();
 	}
 

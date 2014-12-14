@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.ogama.jfsql.query.Query;
@@ -14,16 +15,16 @@ import fr.ogama.jfsql.query.QueryFactory;
 
 public class InTest {
 
-	private String inDirectory1;
-	private String inDirectory2;
-	private String inDirectory3;
+	private static String inDirectory1;
+	private static String inDirectory2;
+	private static String inDirectory3;
 	
-	private File file1;
-	private File file2;
-	private File file3;
+	private static File file1;
+	private static File file2;
+	private static File file3;
 	
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		inDirectory1 = System.getProperty("user.dir") + "/src/test/resources/inTestFolder/Folder 1";
 		inDirectory2 = System.getProperty("user.dir") + "/src/test/resources/inTestFolder/Folder 2";
 		inDirectory3 = System.getProperty("user.dir") + "/src/test/resources/inTestFolder/Folder 3";
