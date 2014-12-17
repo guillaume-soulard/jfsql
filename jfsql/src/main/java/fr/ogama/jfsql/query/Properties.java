@@ -19,6 +19,8 @@ public class Properties {
 	public final static String QUERY_READ_STATEMENT_HAVING_LESSTHAN = "query.read.statement.having.lessthan";
 	public final static String QUERY_READ_STATEMENT_HAVING_LESSTHANOREQUAL = "query.read.statement.having.lessthanorequal";
 
+	public final static String QUERY_READ_STATEMENT_SUBQUERY = "query.read.statement.subquery";
+	
 	private Properties() {
 
 	}

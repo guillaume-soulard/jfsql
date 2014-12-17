@@ -2,10 +2,10 @@ package fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.c
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
+import fr.ogama.jfsql.query.JFSQLUtils;
+import fr.ogama.jfsql.query.clause.ClauseException;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.AbstractFileFilter;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.Operators;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.FilePropertyHelper;
@@ -13,24 +13,18 @@ import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.Fi
 public class ContentFileFilter extends AbstractFileFilter {
 
 	private List<String> contents;
-	
+
 	public ContentFileFilter(List<String> contents) {
 		this.contents = contents;
 	}
-	
-	@Override
-	protected boolean acceptFile(File file, String name) {		
-		try {
-			if (file.isDirectory()) {
-				return false;
-			}
 
-			getOperator().getObjects().addAll(contents);
-			getOperator().setObjectToCompare(FilePropertyHelper.getContent(file));
-			return getOperator().execute();
-		} catch (IOException e) {
+	@Override
+	protected boolean acceptFile(File file, String name) {
+		if (file.isDirectory()) {
 			return false;
 		}
+
+		return super.acceptFile(file, name);
 	}
 
 	@Override
@@ -41,4 +35,17 @@ public class ContentFileFilter extends AbstractFileFilter {
 		addSupportedOperator(Operators.IN);
 	}
 
+	@Override
+	protected Comparable getLeftValue(File file) throws ClauseException {
+		try {
+			return FilePropertyHelper.getContent(file);
+		} catch (IOException e) {
+			throw new ClauseException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	protected List<Comparable> getRightValues(File file) throws ClauseException {
+		return JFSQLUtils.toComparable(contents);
+	}
 }

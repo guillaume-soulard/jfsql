@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.filefilter.IOFileFilter;
 
@@ -45,13 +46,12 @@ public class QueryImpl implements Query {
 			matchFiles.addAll(results);
 		}
 
+		List<Comparable> selectedItems = new LinkedList<Comparable>();
 
 		if (sortClause != null) {
 			Collections.sort(matchFiles, sortClause.getComparator(getClause));
 		}
 		
-		List<Comparable> selectedItems = new LinkedList<Comparable>();
-
 		for (File file : matchFiles) {
 			boolean canSelectMore = true;
 			for (RestrictionClause restrictionClause : restrictionClauses) {
@@ -69,7 +69,7 @@ public class QueryImpl implements Query {
 				selectedItems.add(selected);
 			}
 		}
-		
+					
 		return selectedItems;
 	}
 

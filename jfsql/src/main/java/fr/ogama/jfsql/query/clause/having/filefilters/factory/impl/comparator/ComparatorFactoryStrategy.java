@@ -11,7 +11,10 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.gibello.zql.ZConstant;
 import org.gibello.zql.ZExp;
 import org.gibello.zql.ZExpression;
+import org.gibello.zql.ZQuery;
 
+import fr.ogama.jfsql.query.Query;
+import fr.ogama.jfsql.query.QueryFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.FileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.PropertyFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.PropertyFileFilter;
@@ -39,8 +42,11 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 
 	private Map<String, Class<? extends ComparatorOperator>> operatorStrategy;
 	private Map<String, PropertyFactory> propertyStrategy;
+	private Map<String, String> subQueries;
 
-	public ComparatorFactoryStrategy() {
+	public ComparatorFactoryStrategy(Map<String, String> subQueries) {
+		this.subQueries = subQueries;
+		
 		operatorStrategy = new HashMap<String, Class<? extends ComparatorOperator>>();
 		operatorStrategy.put("=", Equals.class);
 		operatorStrategy.put("<>", Unequal.class);
@@ -73,7 +79,14 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 			List<ZConstant> constants = new ArrayList<ZConstant>();
 			for (ZExp exp : (Vector<ZExp>) expression.getOperands()) {
 				if (exp instanceof ZConstant) {
-					constants.add((ZConstant) exp);
+					
+					if (((ZConstant) exp).getValue().matches("subQuery[0-9]")) {
+						String subQueryString = subQueries.get(((ZConstant) exp).getValue());
+						subQueryString = subQueryString.substring(2, subQueryString.length() - 1);
+						constants.add(new ZConstant(subQueryString, ZConstant.STRING));
+					} else {
+						constants.add((ZConstant) exp);
+					}
 				}
 			}
 
@@ -91,6 +104,8 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

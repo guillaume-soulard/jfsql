@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import fr.ogama.jfsql.query.JFSQLUtils;
+import fr.ogama.jfsql.query.clause.ClauseException;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.AbstractFileFilter;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.Operators;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.FilePropertyHelper;
@@ -17,17 +19,6 @@ public class LastModificationFileFilter extends AbstractFileFilter {
 	}
 	
 	@Override
-	protected boolean acceptFile(File file, String name) {
-		try {
-			getOperator().setObjectToCompare(FilePropertyHelper.getLastModificationDate(file));
-			getOperator().getObjects().addAll(lastmodificationDates);
-			return getOperator().execute();
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	@Override
 	protected void setAllowedOperators() {
 		addSupportedOperator(Operators.EQUAL);
 		addSupportedOperator(Operators.UNEQUAL);
@@ -37,5 +28,19 @@ public class LastModificationFileFilter extends AbstractFileFilter {
 		addSupportedOperator(Operators.LESS_THAN_OR_EQUAL);
 		addSupportedOperator(Operators.BETWEEN);
 		addSupportedOperator(Operators.IN);
+	}
+
+	@Override
+	protected Comparable getLeftValue(File file) throws ClauseException {
+		try {
+			return FilePropertyHelper.getLastModificationDate(file);
+		} catch (Exception e) {
+			throw new ClauseException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	protected List<Comparable> getRightValues(File file) throws ClauseException {
+		return JFSQLUtils.toComparable(lastmodificationDates);
 	}
 }

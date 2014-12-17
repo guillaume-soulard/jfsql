@@ -18,6 +18,11 @@ public class DefaultSorter implements SortClause {
 	}
 	
 	@Override
+	public void setGetClause(GetClause getClause) {
+		this.getClause = getClause;
+	}
+	
+	@Override
 	public Comparator<File> getComparator(GetClause getClause) {
 		
 		this.getClause = getClause;

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import fr.ogama.jfsql.query.clause.ClauseException;
 import fr.ogama.jfsql.query.clause.SortClause;
+import fr.ogama.jfsql.query.clause.get.GetClauseFactory;
 
 public class SortFactory {
 
@@ -43,6 +44,7 @@ public class SortFactory {
 			
 			SortClause sortClause = strategy.get(property.toLowerCase()).newInstance();
 			sortClause.setSortOrder(order);
+			sortClause.setGetClause(GetClauseFactory.getInstance().getClause(property));
 			
 			return sortClause;
 		} catch (Exception e) {

@@ -7,5 +7,6 @@ import fr.ogama.jfsql.query.clause.sort.SortOrder;
 
 public interface SortClause {
 	void setSortOrder(SortOrder sortOrder);
+	void setGetClause(GetClause getClause);
 	Comparator<File> getComparator(GetClause getClause) throws ClauseException;
 }

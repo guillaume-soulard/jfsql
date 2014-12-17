@@ -1,5 +1,7 @@
 package fr.ogama.jfsql.query.clause.having;
 
+import java.util.Map;
+
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.gibello.zql.ZExp;
 import org.gibello.zql.ZExpression;
@@ -11,13 +13,16 @@ import fr.ogama.jfsql.query.clause.having.filefilters.factory.FileFilterFactoryS
 public class HavingClauseImpl implements HavingClause {
 
 	private ZExpression expression;
-
-	public HavingClauseImpl(ZExpression expression) {
+	private Map<String, String> subQueries;
+	
+	public HavingClauseImpl(ZExpression expression, Map<String, String> subQueries) {
+		this.subQueries = subQueries;
 		this.expression = expression;
 	}
 
 	public IOFileFilter getFilter() throws ClauseException {
 		try {
+			FileFilterFactoryStrategy.setSubQueries(subQueries);
 			return FileFilterFactoryStrategy.getInstance().getFileFilter(
 					expression);
 		} catch (Exception e) {

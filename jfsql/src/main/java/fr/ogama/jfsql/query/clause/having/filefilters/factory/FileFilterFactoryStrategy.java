@@ -15,27 +15,14 @@ import fr.ogama.jfsql.query.clause.having.operators.logic.Not;
 
 public class FileFilterFactoryStrategy {
 	
-	private static FileFilterFactoryStrategy instance;
-	
+	private static FileFilterFactoryStrategy instance;	
 	private Map<String, FileFilterFactory> strategy;
+	private static Map<String, String> subQueries;
 	
-	private FileFilterFactoryStrategy() {
-		strategy = new HashMap<String, FileFilterFactory>();
-		strategy.put("and", new AndFileFactory());
-		strategy.put("or", new OrFileFilterFactory());
-		strategy.put("not", new NotFileFilterFactory());
+	private FileFilterFactoryStrategy(){
 		
-		strategy.put("=", new ComparatorFactoryStrategy());
-		strategy.put("<>", new ComparatorFactoryStrategy());
-		strategy.put(">", new ComparatorFactoryStrategy());
-		strategy.put(">=", new ComparatorFactoryStrategy());
-		strategy.put("<", new ComparatorFactoryStrategy());
-		strategy.put("<=", new ComparatorFactoryStrategy());
-		strategy.put("like", new ComparatorFactoryStrategy());
-		strategy.put("in", new ComparatorFactoryStrategy());
-		strategy.put("between", new ComparatorFactoryStrategy());
 	}
-	
+		
 	public static FileFilterFactoryStrategy getInstance() {
 		if (instance == null) {
 			instance = new FileFilterFactoryStrategy();
@@ -44,7 +31,25 @@ public class FileFilterFactoryStrategy {
 		return instance;
 	}
 	
+	private void init() {
+		strategy = new HashMap<String, FileFilterFactory>();
+		strategy.put("and", new AndFileFactory());
+		strategy.put("or", new OrFileFilterFactory());
+		strategy.put("not", new NotFileFilterFactory());
+		
+		strategy.put("=", new ComparatorFactoryStrategy(subQueries));
+		strategy.put("<>", new ComparatorFactoryStrategy(subQueries));
+		strategy.put(">", new ComparatorFactoryStrategy(subQueries));
+		strategy.put(">=", new ComparatorFactoryStrategy(subQueries));
+		strategy.put("<", new ComparatorFactoryStrategy(subQueries));
+		strategy.put("<=", new ComparatorFactoryStrategy(subQueries));
+		strategy.put("like", new ComparatorFactoryStrategy(subQueries));
+		strategy.put("in", new ComparatorFactoryStrategy(subQueries));
+		strategy.put("between", new ComparatorFactoryStrategy(subQueries));
+	}
+	
 	public IOFileFilter getFileFilter(ZExpression expression) {		
+		init();
 		String operator = expression.getOperator().toLowerCase();
 		boolean hasNotOperator = operator.contains("not");
 		operator = operator.trim().replaceAll("[ ]?not[ ]?", "");
@@ -61,5 +66,9 @@ public class FileFilterFactoryStrategy {
 		}		
 		
 		return fileFilter;
+	}
+
+	public static void setSubQueries(Map<String, String> subQueries) {
+		FileFilterFactoryStrategy.subQueries = subQueries;
 	}
 }

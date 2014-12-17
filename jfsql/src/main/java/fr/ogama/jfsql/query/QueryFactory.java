@@ -6,6 +6,7 @@ import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -43,8 +44,7 @@ public class QueryFactory {
 				.getFindClause());
 		InClause inClause = parseIn(queryClause.getInClause());
 		HavingClause havingClause = parseHaving(queryClause.getHavingClause());
-		SortClause sortClause = parseSortClauseOnHaving(queryClause
-				.getHavingClause());
+		SortClause sortClause = parseSortClauseOnQuery(query);
 
 		return new QueryImpl(findClause.getObject1(), findClause.getObject2(),
 				inClause, havingClause, sortClause, queryClause.getDeepClause());
@@ -66,14 +66,21 @@ public class QueryFactory {
 
 				if (findStatement != null && inStatement != null) {
 					QueryClause queryClause = new QueryClause();
+					// get Clause
 					queryClause
 							.setFindClause(findStatement != null ? findStatement
 									: "");
+					
+					// In clause
 					queryClause.setInClause(inStatement != null ? inStatement
 							: "");
+					
+					// Having clause
 					queryClause
 							.setHavingClause(havingStatement != null ? havingStatement
 									: "");
+										
+					// Deep clause
 					if (deepStatement != null) {
 						if (deepStatement.equals("infinite")) {
 							queryClause.setDeepClause(Integer.MAX_VALUE);
@@ -157,28 +164,33 @@ public class QueryFactory {
 
 	private static HavingClause parseHaving(String having) throws Exception {
 		if (having != null && !having.isEmpty()) {
-			String query = JFSQLUtils.jfsqlHavingClauseToSqlWhereClause(having);
-			InputStream in = new ByteArrayInputStream(query.getBytes());
+			
+			// delete sort clause if exists
+			String sortClauseRegex = Properties.getProperty(Properties.QUERY_READ_STATEMENT_SORT);
+			having = having.replaceAll(sortClauseRegex, "");
+			
+			Pair<String, Map<String, String>> result = JFSQLUtils.jfsqlHavingClauseToSqlWhereClause(having);
+			InputStream in = new ByteArrayInputStream(result.getObject1().getBytes());
 			ZqlParser parser = new ZqlParser(in);
 			Vector<ZStatement> statements = parser.readStatements();
 
 			for (ZStatement statement : statements) {
 				if (statement instanceof ZQuery) {
 					return new HavingClauseImpl(
-							(ZExpression) ((ZQuery) statement).getWhere());
+							(ZExpression) ((ZQuery) statement).getWhere(), result.getObject2());
 				}
 			}
 		}
 		return null;
 	}
 
-	private static SortClause parseSortClauseOnHaving(String having)
+	private static SortClause parseSortClauseOnQuery(String query)
 			throws Exception {
-		if (having != null && !having.isEmpty()) {
+		if (query != null && !query.isEmpty()) {
 			String regex = Properties
 					.getProperty(Properties.QUERY_READ_STATEMENT_SORT);
 			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = JFSQLUtils.executeRegexp(pattern, having);
+			Matcher matcher = JFSQLUtils.executeRegexp(pattern, query);
 
 			if (matcher.find()) {
 				String sortProperty = matcher.group("sortByProperty");
