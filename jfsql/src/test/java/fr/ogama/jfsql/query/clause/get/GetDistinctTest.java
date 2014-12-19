@@ -78,7 +78,6 @@ public class GetDistinctTest {
 		assertThat(results).isNotNull().isNotEmpty();
 		assertThat(results).hasOnlyElementsOfType(Long.class);
 		assertThat(results).containsOnlyOnce(0L);
-		assertThat(results).hasSize(2);
 
 		for (Comparable result : results) {
 			assertThat((Long) result).isNotNull().isGreaterThanOrEqualTo(0L);

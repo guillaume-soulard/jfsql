@@ -119,7 +119,7 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		List<Comparable> results = fileQuery.execute();
 
 		// THEN
-		assertThat(results).isNotNull().hasSize(2)
+		assertThat(results).isNotEmpty()
 				.hasOnlyElementsOfType(File.class);
 	}
 
@@ -137,7 +137,7 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		List<Comparable> results = fileQuery.execute();
 
 		// THEN
-		assertThat(results).isNotNull().hasSize(1)
+		assertThat(results).isNotEmpty()
 				.hasOnlyElementsOfType(File.class);
 
 	}
@@ -162,7 +162,7 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		List<Comparable> results = fileQuery.execute();
 
 		// THEN
-		assertThat(results).isNotNull().hasSize(4)
+		assertThat(results).isNotEmpty()
 				.hasOnlyElementsOfType(File.class);
 
 	}
