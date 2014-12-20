@@ -182,4 +182,51 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 				.hasOnlyElementsOfType(File.class);
 
 	}
+	
+	@Test
+	public void should_get_names_by_file_type() throws Exception {
+		// GIVEN
+		String query = "get name in ('" + directory
+				+ "') having type = 'file'";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().hasSize(7)
+				.hasOnlyElementsOfType(String.class);
+
+	}
+	
+	@Test
+	public void should_get_names_by_directory_type() throws Exception {
+		// GIVEN
+		String query = "get name in ('" + directory
+				+ "') having type = 'directory'";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().hasSize(2)
+				.hasOnlyElementsOfType(String.class);
+
+	}
+	
+	@Test
+	public void should_get_names_by_status() throws Exception {
+		// GIVEN
+		String query = "get name in ('" + directory
+				+ "') having status = 'executable'";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotNull().hasSize(2)
+				.hasOnlyElementsOfType(String.class);
+	}
 }

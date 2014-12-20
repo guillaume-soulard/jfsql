@@ -1,7 +1,6 @@
 package fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.comparator;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +10,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.gibello.zql.ZConstant;
 import org.gibello.zql.ZExp;
 import org.gibello.zql.ZExpression;
-import org.gibello.zql.ZQuery;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.FileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.PropertyFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.PropertyFileFilter;
@@ -27,6 +23,8 @@ import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.ow
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.parent.ParentFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.path.PathFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.size.SizeFileFilterFactory;
+import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.status.StatusFileFilterFactory;
+import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.type.TypeFileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.Between;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.ComparatorOperator;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.Equals;
@@ -68,7 +66,8 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 		propertyStrategy.put("last_update_date", new LastModificationFileFilterFactory());
 		propertyStrategy.put("last_access_date", new LastAccessDateFileFilterFactory());
 		propertyStrategy.put("owner", new OwnerFileFilterFactory());
-		
+		propertyStrategy.put("type", new TypeFileFilterFactory());
+		propertyStrategy.put("status", new StatusFileFilterFactory());
 	}
 
 	public IOFileFilter getFileFilter(ZExpression expression) {

@@ -34,6 +34,8 @@ public final class GetClauseFactory {
 		strategy.put("path", GetPath.class);
 		strategy.put("content", GetContent.class);
 		strategy.put("owner", GetOwner.class);
+		strategy.put("type", GetType.class);
+		strategy.put("status", GetStatus.class);
 	}
 	
 	public GetClause getClause(String getClauses) throws Exception {

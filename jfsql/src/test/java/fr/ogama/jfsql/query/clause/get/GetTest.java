@@ -10,8 +10,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import fr.ogama.jfsql.query.FileType;
 import fr.ogama.jfsql.query.Query;
 import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.query.Status;
 
 public class GetTest {
 
@@ -183,7 +185,7 @@ public class GetTest {
 			assertThat(new File((String) result)).exists();
 		}
 	}
-	
+
 	@Test
 	public void should_get_creation_date() throws Exception {
 		// GIVEN
@@ -199,10 +201,11 @@ public class GetTest {
 
 		for (Comparable result : results) {
 			assertThat((String) result).isNotEmpty();
-			assertThat((String) result).matches("[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+			assertThat((String) result).matches(
+					"[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
 		}
 	}
-	
+
 	@Test
 	public void should_get_last_update_date() throws Exception {
 		// GIVEN
@@ -218,10 +221,11 @@ public class GetTest {
 
 		for (Comparable result : results) {
 			assertThat((String) result).isNotEmpty();
-			assertThat((String) result).matches("[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+			assertThat((String) result).matches(
+					"[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
 		}
 	}
-	
+
 	@Test
 	public void should_get_last_access_date() throws Exception {
 		// GIVEN
@@ -237,10 +241,11 @@ public class GetTest {
 
 		for (Comparable result : results) {
 			assertThat((String) result).isNotEmpty();
-			assertThat((String) result).matches("[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+			assertThat((String) result).matches(
+					"[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
 		}
 	}
-	
+
 	@Test
 	public void should_get_size() throws Exception {
 		// GIVEN
@@ -258,7 +263,7 @@ public class GetTest {
 			assertThat((Long) result).isNotNull().isGreaterThanOrEqualTo(0L);
 		}
 	}
-	
+
 	@Test
 	public void should_get_owner() throws Exception {
 		// GIVEN
@@ -274,6 +279,47 @@ public class GetTest {
 
 		for (Comparable result : results) {
 			assertThat((String) result).isNotEmpty();
+		}
+	}
+
+	@Test
+	public void should_get_type() throws Exception {
+		// GIVEN
+		String query = "get type in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+			assertThat((String) result).isIn(FileType.FILE.getLabel(),
+					FileType.DIRECTORY.getLabel());
+		}
+	}
+
+	@Test
+	public void should_get_status() throws Exception {
+		// GIVEN
+		String query = "get status in ('" + getTestDirectory + "')";
+		Query fileQuery = QueryFactory.newQuery(query);
+
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+
+		// THEN
+		assertThat(results).isNotEmpty();
+		assertThat(results).hasOnlyElementsOfType(String.class);
+
+		for (Comparable result : results) {
+			assertThat((String) result).isNotEmpty();
+			assertThat((String) result).isIn(Status.NONE.getLabel(),
+					Status.READABLE.getLabel(), Status.WRITABLE.getLabel(),
+					Status.EXECUTABLE.getLabel());
 		}
 	}
 }

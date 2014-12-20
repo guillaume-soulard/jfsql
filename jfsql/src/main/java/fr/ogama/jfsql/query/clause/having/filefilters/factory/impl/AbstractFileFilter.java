@@ -100,7 +100,7 @@ public abstract class AbstractFileFilter implements IOFileFilter,
 			getOperator().setObjects(rightValues);
 			return getOperator().execute();
 		} catch (ClauseException e) {
-			return false;
+			throw new IllegalArgumentException(e.getMessage(), e);
 		}
 	}
 
