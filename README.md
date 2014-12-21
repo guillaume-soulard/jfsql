@@ -30,7 +30,7 @@ List<Comparable> results = query.execute();
 General syntax :
 
 ```
-get [<limit>] [<distinct>] <attribute> in (<path> [, <path>]*) [deep <striclyPositiveNumber> &#124; infinite] [having <conditions>] [sort by <property> ascending &#124; descending]
+get [<limit>] [<distinct>] <attribute> in (<path> [, <path>]*) [deep <striclyPositiveNumber> | infinite] [having <conditions>] [sort by <property> ascending | descending]
 ```
 
 ###Get clause
