@@ -11,9 +11,9 @@ import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.Pr
 public class SizeFileFilterFactory implements PropertyFactory {
 
 	public PropertyFileFilter getPropertyFileFilter(List<ZConstant> values) {
-		List<Long> sizes = new ArrayList<Long>();
+		List<String> sizes = new ArrayList<String>();
 		for (ZConstant constant : values) {
-			sizes.add(Long.valueOf(constant.getValue()));
+			sizes.add(constant.getValue());
 		}
 		return new SizeFileFilter(sizes);
 	}

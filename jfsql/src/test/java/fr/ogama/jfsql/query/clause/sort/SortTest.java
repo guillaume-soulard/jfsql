@@ -72,4 +72,18 @@ public class SortTest {
 		assertThat(descendingResults).isNotNull().hasSize(2);
 		assertThat(descendingResults).containsExactly(ccc, bbb);
 	}
+	
+	@Test
+	public void should_get_root_directories_size_sorted() throws Exception {
+		// GIVEN		
+		String ascendingQuery = "get size in('/') deep 1 sort by size ascending";
+		Query ascendingFileQuery = QueryFactory.newQuery(ascendingQuery);
+		
+		// WHEN
+		List<Comparable> ascendingResults = ascendingFileQuery.execute();
+		
+		// THEN
+		assertThat(ascendingResults).isNotEmpty();
+		assertThat(ascendingResults).isSorted();
+	}
 }

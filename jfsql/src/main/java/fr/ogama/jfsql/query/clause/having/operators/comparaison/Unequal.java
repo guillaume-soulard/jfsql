@@ -1,5 +1,7 @@
 package fr.ogama.jfsql.query.clause.having.operators.comparaison;
 
+import fr.ogama.jfsql.query.clause.ClauseException;
+
 
 public class Unequal extends Equals {
 
@@ -7,8 +9,8 @@ public class Unequal extends Equals {
 		super();
 	}
 	
-	public boolean execute() {
-		return !super.execute();
+	@Override
+	protected boolean executeComparator() throws ClauseException {
+		return !super.executeComparator();
 	}
-
 }

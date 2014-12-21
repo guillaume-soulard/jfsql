@@ -71,6 +71,10 @@ public abstract class AbstractFileFilter implements IOFileFilter,
 		supportedOperators.put(operator, availableOperators.get(operator));
 	}
 
+	protected Comparable convertValue(Comparable value) throws ClauseException {
+		return value;
+	}
+	
 	protected boolean acceptFile(File file, String name) {
 		try {			
 			List<Comparable> rightValues = getRightValues(file);
@@ -81,7 +85,7 @@ public abstract class AbstractFileFilter implements IOFileFilter,
 				Pattern pattern = Pattern.compile(Properties.getProperty(Properties.QUERY_READ_STATEMENT_GENERAL));
 				for (Comparable value : rightValues) {
 					if (value instanceof String &&
-							JFSQLUtils.executeRegexp(pattern, (String) value).matches()) {
+							JFSQLUtils.executeRegexp(pattern, (String) value).find()) {
 						Query query = QueryFactory.newQuery((String) value);
 						List<Comparable> results = query.execute();
 						resultsToAdd.addAll(results);
@@ -89,12 +93,15 @@ public abstract class AbstractFileFilter implements IOFileFilter,
 					}
 				}
 			} catch (Exception e) {
-				// FIXME exception management
-				e.printStackTrace();
+				throw new RuntimeException(e.getMessage(), e);
 			}
 			
 			rightValues.removeAll(valuesToRemove);			
 			rightValues.addAll(resultsToAdd);
+			
+			for (Comparable rightValue : rightValues) {
+				rightValues.set(rightValues.indexOf(rightValue), convertValue(rightValue));
+			}
 			
 			getOperator().setObjectToCompare(getLeftValue(file));
 			getOperator().setObjects(rightValues);

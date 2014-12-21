@@ -11,9 +11,9 @@ import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.Fi
 
 public class SizeFileFilter extends AbstractFileFilter {
 
-	private List<Long> sizes;
+	private List<String> sizes;
 	
-	public SizeFileFilter(List<Long> sizes) {
+	public SizeFileFilter(List<String> sizes) {
 		this.sizes = sizes;
 	}
 	
@@ -43,4 +43,8 @@ public class SizeFileFilter extends AbstractFileFilter {
 		return JFSQLUtils.toComparable(sizes);
 	}
 
+	@Override
+	protected Comparable convertValue(Comparable value) throws ClauseException {
+		return Long.valueOf(String.valueOf(value));
+	}
 }

@@ -49,4 +49,17 @@ public class HavingSubQueryComparatorsTest extends AbstractHavingTest {
 		// THEN
 		assertThat(results).isNotNull().hasSize(1);
 	}
+	
+	@Test
+	public void should_execute_sub_query_size() throws Exception {
+		// GIVEN
+		String query = "get file or directory in ('/') deep 1 having size = #{get 1 size in ('/') deep 1 sort by size descending}";
+		Query fileQuery = QueryFactory.newQuery(query);
+		
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+		
+		// THEN
+		assertThat(results).isNotEmpty();
+	}
 }

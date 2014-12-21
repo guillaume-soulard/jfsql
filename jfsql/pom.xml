@@ -6,6 +6,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<name>JFSQL</name>
 	<description>Java File system Query Language</description>
 	<url>https://github.com/ogama/jfsql</url>
@@ -45,11 +49,42 @@
 		</dependency>
 
 		<dependency>
-			<groupId>doesntMatter</groupId>
-			<artifactId>doesntMatter</artifactId>
-			<version>doesntMatter</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/libs/zql.jar</systemPath>
+			<groupId>org.gibello</groupId>
+			<artifactId>zql</artifactId>
+			<version>1.0</version>
 		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>doesntMatter</groupId> -->
+		<!-- <artifactId>doesntMatter</artifactId> -->
+		<!-- <version>doesntMatter</version> -->
+		<!-- <scope>system</scope> -->
+		<!-- <systemPath>${basedir}/libs/zql.jar</systemPath> -->
+		<!-- </dependency> -->
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>localRepository</id>
+			<url>${baseDir}/localRepository</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>fr.ogama.jfsql.JFSQL</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

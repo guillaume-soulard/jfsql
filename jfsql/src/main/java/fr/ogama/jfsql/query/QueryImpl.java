@@ -78,24 +78,25 @@ public class QueryImpl implements Query {
 		List<File> matchingFiles = new LinkedList<File>();
 
 		if (deepLevel <= maxDeep) {
-			for (File file : directory.listFiles()) {
-				boolean accept = false;
-				if (fileFilter == null) {
-					accept = true;
-				} else {
-					accept = fileFilter.accept(file);
-				}
-				if (accept) {
-					matchingFiles.add(file);
-				}
-
-				if (file.isDirectory()) {
-					matchingFiles.addAll(getMathingFileOrDirectoryInDirectory(
-							file, fileFilter, deepLevel + 1));
+			File[] files = directory.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					boolean accept = false;
+					if (fileFilter == null) {
+						accept = true;
+					} else {
+						accept = fileFilter.accept(file);
+					}
+					if (accept) {
+						matchingFiles.add(file);
+					}
+	
+					if (file.isDirectory()) {
+						matchingFiles.addAll(getMathingFileOrDirectoryInDirectory(
+								file, fileFilter, deepLevel + 1));
+					}
 				}
 			}
-		} else {
-			return new LinkedList<File>();
 		}
 
 		return matchingFiles;

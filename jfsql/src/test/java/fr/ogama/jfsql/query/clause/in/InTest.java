@@ -153,4 +153,16 @@ public class InTest {
 		
 		// THEN
 	}
+	
+	@Test
+	public void should_get_directories_in_root() throws Exception {
+		String query = "get directory in ('/') deep 1";
+		Query fileQuery = QueryFactory.newQuery(query);
+		
+		// WHEN
+		List<Comparable> results = fileQuery.execute();
+		
+		// THEN
+		assertThat(results).isNotEmpty().hasOnlyElementsOfType(File.class);
+	}
 }

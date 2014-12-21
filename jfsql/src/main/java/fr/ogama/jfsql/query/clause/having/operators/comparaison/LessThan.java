@@ -1,22 +1,16 @@
 package fr.ogama.jfsql.query.clause.having.operators.comparaison;
 
-import java.util.List;
+import fr.ogama.jfsql.query.clause.ClauseException;
 
 public class LessThan extends AbstractComparatorOperator {
 
 	public LessThan() {
-		super();
+		super(1, 1);
 	}
 	
-	public boolean execute() {	
-		
-		for (Comparable comparable : getObjects()) {
-			if (getObjectToCompare().compareTo(comparable) < 0) {
-				return true;
-			}
-		}
-
-		return false;
+	@Override
+	protected boolean executeComparator() throws ClauseException {
+		Comparable comparable = getObjects().get(0);
+		return getObjectToCompare().compareTo(comparable) < 0;
 	}
-
 }

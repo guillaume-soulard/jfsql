@@ -1,20 +1,17 @@
 package fr.ogama.jfsql.query.clause.having.operators.comparaison;
 
+import fr.ogama.jfsql.query.clause.ClauseException;
+
 
 public class Equals extends AbstractComparatorOperator {
 
 	public Equals() {
-		super();
+		super(1, 1);
 	}
-	
-	public boolean execute() {		
-		
-		for (Comparable comparable : getObjects()) {
-			if (comparable.compareTo(getObjectToCompare()) == 0) {
-				return true;
-			}
-		}
 
-		return false;
+	@Override
+	protected boolean executeComparator() throws ClauseException {
+		Comparable comparable = getObjects().get(0);
+		return comparable.compareTo(getObjectToCompare()) == 0;
 	}
 }

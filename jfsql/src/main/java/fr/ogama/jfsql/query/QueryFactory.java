@@ -165,8 +165,9 @@ public class QueryFactory {
 	private static HavingClause parseHaving(String having) throws Exception {
 		if (having != null && !having.isEmpty()) {
 			
-			// delete sort clause if exists
+			// delete sort clause if exists but not on sub queries
 			String sortClauseRegex = Properties.getProperty(Properties.QUERY_READ_STATEMENT_SORT);
+			sortClauseRegex += "$";
 			having = having.replaceAll(sortClauseRegex, "");
 			
 			Pair<String, Map<String, String>> result = JFSQLUtils.jfsqlHavingClauseToSqlWhereClause(having);

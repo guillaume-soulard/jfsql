@@ -1,21 +1,18 @@
 package fr.ogama.jfsql.query.clause.having.operators.comparaison;
 
+import fr.ogama.jfsql.query.clause.ClauseException;
 
 public class Like extends AbstractComparatorOperator {
 
 	public Like() {
-		super();
+		super(1, 1);
 	}
 	
-	public boolean execute() {	
-		
-		for (Comparable comparable : getObjects()) {
-			if (!String.valueOf(getObjectToCompare()).contains(String.valueOf(comparable))){
-				return false;
-			}
-		}
-		
-		return true;
+	@Override
+	protected boolean executeComparator() throws ClauseException {
+		Comparable comparable = getObjects().get(0);
+		return String.valueOf(getObjectToCompare()).contains(
+				String.valueOf(comparable));
 	}
 
 }
