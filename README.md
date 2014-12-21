@@ -21,7 +21,7 @@ Be careful, this command don't run any tests. To do that you have to run a 'clea
 ##Usage
 Sample usage in a Java application :
 ```java
-Query query = Queryfactory.newQuery("get file or directory in('/home/Bob);
+Query query = Queryfactory.newQuery("get file or directory in('/home/Bob)");
 List<Comparable> results = query.execute();
 ```
 
@@ -30,7 +30,7 @@ List<Comparable> results = query.execute();
 General syntax :
 
 ```
-get [<limit>] [<distinct>] <attribute> in (<path> [, <path>]*) [deep <striclyPositiveNumber>|infinite] [having <conditions>] [sort by <property> ascending | descending]
+get [<limit>] [<distinct>] <attribute> in (<path> [, <path>]*) [deep <striclyPositiveNumber> &#124; infinite] [having <conditions>] [sort by <property> ascending &#124; descending]
 ```
 
 ###Get clause
