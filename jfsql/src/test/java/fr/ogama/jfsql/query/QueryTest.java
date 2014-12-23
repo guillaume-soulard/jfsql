@@ -88,4 +88,17 @@ public class QueryTest {
 		assertThat(objects).isNotNull().hasSize(4);
 		assertThat(objects).hasOnlyElementsOfType(File.class);
 	}
+	
+	@Test
+	public void should_execute_multi_line_and_spaces_query() throws Exception {
+		// GIVEN		
+		Query query = QueryFactory.newQuery("get     file or	directory\nin ('/') deep 1\nhaving   type  =   'directory' \nand name like 'o'");
+		
+		// WHEN
+		List<Comparable> objects = query.execute();
+		
+		// THEN
+		assertThat(objects).isNotEmpty();
+		assertThat(objects).hasOnlyElementsOfType(File.class);
+	}
 }

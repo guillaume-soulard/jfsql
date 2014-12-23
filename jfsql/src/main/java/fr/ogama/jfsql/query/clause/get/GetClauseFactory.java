@@ -7,19 +7,19 @@ import fr.ogama.jfsql.query.clause.ClauseException;
 import fr.ogama.jfsql.query.clause.GetClause;
 
 public final class GetClauseFactory {
-	
+
 	private static GetClauseFactory instance;
-	
+
 	private Map<String, Class<? extends GetClause>> strategy;
-	
+
 	public static GetClauseFactory getInstance() {
 		if (instance == null) {
 			instance = new GetClauseFactory();
 		}
-		
+
 		return instance;
 	}
-	
+
 	private GetClauseFactory() {
 		strategy = new HashMap<String, Class<? extends GetClause>>();
 		strategy.put("file", GetFile.class);
@@ -37,14 +37,19 @@ public final class GetClauseFactory {
 		strategy.put("type", GetType.class);
 		strategy.put("status", GetStatus.class);
 	}
-	
+
 	public GetClause getClause(String getClauses) throws Exception {
-		Class<? extends GetClause> getClause = strategy.get(getClauses.toLowerCase());
-		
+		// delete extra spaces
+		getClauses = getClauses.replaceAll("\t", " ").replaceAll("\n", " ")
+				.replaceAll(" +", " ");
+
+		Class<? extends GetClause> getClause = strategy.get(getClauses
+				.toLowerCase());
+
 		if (getClause != null) {
 			return getClause.newInstance();
 		}
-		
+
 		throw new ClauseException("Unexpected attribute : " + getClauses);
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Vector;
 import org.gibello.zql.ParseException;
 import org.gibello.zql.ZStatement;
 import org.gibello.zql.ZqlParser;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ZQLTest {
@@ -19,7 +20,16 @@ public class ZQLTest {
 		InputStream in = new ByteArrayInputStream(query.getBytes());
 		ZqlParser parser = new ZqlParser(in);
 		Vector<ZStatement> statements = parser.readStatements();
-		assertThat(statements).isNotNull().isNotEmpty();
+		assertThat(statements).isNotEmpty();
 	}
 
+	@Ignore
+	@Test
+	public void should_validate_aggregation_functions() throws ParseException {
+		String query = "select max(size) from directory where asDate(extract(content, '[0-9]{4}/[0-9]{2}/[0-9]{2}'))";
+		InputStream in = new ByteArrayInputStream(query.getBytes());
+		ZqlParser parser = new ZqlParser(in);
+		Vector<ZStatement> statements = parser.readStatements();
+		assertThat(statements).isNotEmpty();
+	}
 }

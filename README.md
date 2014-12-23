@@ -21,7 +21,7 @@ Be careful, this command don't run any tests. To do that you have to run a 'clea
 ##Usage
 Sample usage in a Java application :
 ```java
-Query query = Queryfactory.newQuery("get file or directory in('/home/Bob)");
+Query query = Queryfactory.newQuery("get file or directory in('/home/Bob')");
 List<Comparable> results = query.execute();
 ```
 
@@ -126,15 +126,27 @@ You can filter on followings properties :
 * type : 'file' or 'directory'
 
 Supported comparators :
-* '='
-* '<>'
-* '>'
-* '>='
-* '<'
-* '<='
-* 'in'
-* 'like'
-* 'between'
+* =
+* <>
+* >
+* \>=
+* <
+* <=
+* in : some values fix values 
+* like : true if the property contains the specifier string (only on text)
+* between : test if the property is between the two specified values (works on all types but became unstable on texts)
+* match (work in progress) true if the property match the specified regex. (only on text)
+
+Exemples : 
+
+```
+path = '/home'
+size > 0
+creation_date between '2014/01/01 00:00:00' and '2014/12/31 23:59:59'
+parent in ('parent 1', 'parent 2', 'parent 3')
+content like 'dolor sit'
+name match ''
+```
 
 Supported logical operators : 
 
@@ -177,4 +189,24 @@ You can sort on followings properties :
 * creation_date : the creation date (yyyy/mm/dd hh/mm/ss)
 * status : 'readable', 'writable', 'executable'
 
+###Functions (work in progress)
+####Aggregations Functions
+
+Aggregations functions is only supported in get clause : 
+* count (attribute)
+* min (attribute) : works only on numbers
+* max (attribute) : works only on numbers
+* avg (attribute) : works only on numbers
+* sum (attribute) : works only on numbers
+
+####Functions
+
+Those functions can be use in get or having clauses : 
+* asDate (value) : parse the specified value and return a date
+* asInteger (value) : cast the specified value as an integer
+* asDecimal (value, separator) : cast the specified value as a decimal number with the specified separator
+* asString (value)
+* asDateString(value, formatPattern)
+* concat(string, string)
+* extract (value, regexp)
 
