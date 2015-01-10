@@ -1,0 +1,6 @@
+CLEAR_CONSOLE=false
+JJ_NATURE=true
+RUNTIME_JJJAR=/home/ogama/Bureau/eclipse/plugins/sf.eclipse.javacc_1.5.28/javacc-5.0.jar
+RUNTIME_JTBJAR=/home/ogama/Bureau/eclipse/plugins/sf.eclipse.javacc_1.5.28/jtb-1.4.8.jar
+SUPPRESS_WARNINGS=false
+eclipse.preferences.version=1

@@ -30,7 +30,7 @@ List<Comparable> results = query.execute();
 General syntax :
 
 ```
-get [<limit>] [<distinct>] <attribute> in (<path> [, <path>]*) [deep <striclyPositiveNumber> | infinite] [having <conditions>] [sort by <property> ascending | descending]
+get [<limit>] [<distinct>] <attribute> in (<path> [deep <positiveNumber>] [, <path> [deep <positiveNumber>]]*) [having <conditions>] [sort by <property> ascending | descending]
 ```
 
 ###Get clause
@@ -38,6 +38,7 @@ get [<limit>] [<distinct>] <attribute> in (<path> [, <path>]*) [deep <striclyPos
 ####Attributes
 Select the file attribute to return as a result of the query.
 
+* file : select the Java File object or full file or directory name (path + name)
 * name : get the name of files or directories
 * owner : get the owner of files or directories
 * path : get the path
@@ -49,11 +50,6 @@ Select the file attribute to return as a result of the query.
 * creation_date : get the creation date (yyyy/mm/dd hh/mm/ss)
 * status : 'readable', 'writable', 'executable'
 * type : 'file' or 'directory' 
-
-Additional attributes for Java only : 
-* file : select the Java File object (select only files and not directories)
-* directory : select the Java File object (select only directories and not files)
-* file or directory : select the Java File object (select files and directories)
 
 
 ####Restrictions
@@ -188,6 +184,7 @@ You can sort on followings properties :
 * last_access_date : the last access date (yyyy/mm/dd hh/mm/ss)
 * creation_date : the creation date (yyyy/mm/dd hh/mm/ss)
 * status : 'readable', 'writable', 'executable'
+* type : 'file', 'directory'
 
 ###Functions (work in progress)
 ####Aggregations Functions

@@ -1,3 +1,0 @@
-
-javac -d ../classes org/gibello/zql/*.java
-
