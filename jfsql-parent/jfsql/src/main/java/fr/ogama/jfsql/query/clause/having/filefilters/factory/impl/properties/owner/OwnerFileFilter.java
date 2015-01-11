@@ -23,6 +23,7 @@ public class OwnerFileFilter extends AbstractFileFilter {
 		addSupportedOperator(Operators.UNEQUAL);
 		addSupportedOperator(Operators.LIKE);
 		addSupportedOperator(Operators.IN);
+		addSupportedOperator(Operators.MATCH);
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import fr.ogama.utils.parser.model.get.ExpressionImpl;
 
 public class OrFileFilterFactory implements FileFilterFactory {
 
-	public IOFileFilter getFileFilter(ExpressionImpl expression) {
+	public IOFileFilter getFileFilter(ExpressionImpl expression) throws Exception {
 		List<IOFileFilter> fileFilters = new ArrayList<IOFileFilter>();
 		
 		for (ExpressionImpl subExpression : (Vector<ExpressionImpl>) expression.getOperands()) {

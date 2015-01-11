@@ -48,7 +48,7 @@ public class QueryImpl implements Query {
 		List<Comparable> selectedItems = new LinkedList<Comparable>();
 
 		if (sortClause != null) {
-			Collections.sort(matchFiles, sortClause.getComparator(getClause));
+			Collections.sort(matchFiles, sortClause.getComparator());
 		}
 		
 		for (File file : matchFiles) {
