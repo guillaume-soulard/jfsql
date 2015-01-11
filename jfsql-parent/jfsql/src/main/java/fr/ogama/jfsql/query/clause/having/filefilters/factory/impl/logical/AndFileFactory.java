@@ -10,12 +10,11 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.FileFilterFactory;
 import fr.ogama.jfsql.query.clause.having.filefilters.factory.FileFilterFactoryStrategy;
-import fr.ogama.utils.parser.model.get.Expression;
 import fr.ogama.utils.parser.model.get.ExpressionImpl;
 
 public class AndFileFactory implements FileFilterFactory {
 
-	public IOFileFilter getFileFilter(ExpressionImpl expression) {
+	public IOFileFilter getFileFilter(ExpressionImpl expression) throws Exception {
 		List<FileFilter> fileFilters = new ArrayList<FileFilter>();
 		
 		for (ExpressionImpl subExpression : (Vector<ExpressionImpl>) expression.getOperands()) {

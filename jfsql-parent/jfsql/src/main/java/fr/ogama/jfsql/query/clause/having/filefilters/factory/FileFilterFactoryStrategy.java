@@ -45,9 +45,10 @@ public class FileFilterFactoryStrategy {
 		strategy.put("like", new ComparatorFactoryStrategy());
 		strategy.put("in", new ComparatorFactoryStrategy());
 		strategy.put("between", new ComparatorFactoryStrategy());
+		strategy.put("match", new ComparatorFactoryStrategy());
 	}
 	
-	public IOFileFilter getFileFilter(ExpressionImpl expression) {		
+	public IOFileFilter getFileFilter(ExpressionImpl expression) throws Exception {		
 		init();
 		String operator = expression.getOperator().toLowerCase();
 		boolean hasNotOperator = operator.contains("not");

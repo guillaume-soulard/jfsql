@@ -10,7 +10,8 @@ public enum Operators {
 	LESS_THAN_OR_EQUAL("<="),
 	IN("in"),
 	BETWEEN("between"),
-	LIKE("like");
+	LIKE("like"),
+	MATCH("match");
 	
 	private String name;
 	

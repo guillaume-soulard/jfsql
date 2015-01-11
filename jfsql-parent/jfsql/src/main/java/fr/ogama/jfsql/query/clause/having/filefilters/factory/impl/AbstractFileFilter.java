@@ -26,6 +26,7 @@ import fr.ogama.jfsql.query.clause.having.operators.comparaison.In;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.LessThan;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.LessThanOrEqual;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.Like;
+import fr.ogama.jfsql.query.clause.having.operators.comparaison.Match;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.Unequal;
 
 public abstract class AbstractFileFilter implements IOFileFilter,
@@ -50,7 +51,8 @@ public abstract class AbstractFileFilter implements IOFileFilter,
 				new LessThanOrEqual());
 		availableOperators.put(Operators.LIKE, new Like());
 		availableOperators.put(Operators.UNEQUAL, new Unequal());
-
+		availableOperators.put(Operators.MATCH, new Match());
+		
 		setAllowedOperators();
 	}
 
@@ -92,7 +94,7 @@ public abstract class AbstractFileFilter implements IOFileFilter,
 					}
 				}
 			} catch (Exception e) {
-				throw new RuntimeException(e.getMessage(), e);
+				throw new IllegalArgumentException(e.getMessage(), e);
 			}
 			
 			rightValues.removeAll(valuesToRemove);			

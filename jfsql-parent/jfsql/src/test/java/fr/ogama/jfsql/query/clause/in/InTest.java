@@ -166,4 +166,26 @@ public class InTest {
 		// THEN
 		assertThat(results).isNotEmpty().hasOnlyElementsOfType(File.class);
 	}
+	
+	@Test
+	public void should_get_file_in_in_sub_query() throws Exception {
+		String directoryQueryString = "get 2 file in ('.' deep 1) having type = 'directory'";
+		Query directoryQuery = QueryFactory.newQuery(directoryQueryString + ";");
+		
+		String query = "get file in (" + directoryQueryString + " deep 1);";
+		Query fileQuery = QueryFactory.newQuery(query);
+		
+		// WHEN
+		List<Comparable> dirResults = directoryQuery.execute();
+		List<Comparable> results = fileQuery.execute();
+		
+		// THEN
+		assertThat(results).isNotEmpty();
+		
+		for (Comparable result : results) {
+			assertThat(result).isExactlyInstanceOf(File.class);
+			File file = (File) result;
+			assertThat(file.getParentFile()).isIn(dirResults);
+		}
+	}
 }

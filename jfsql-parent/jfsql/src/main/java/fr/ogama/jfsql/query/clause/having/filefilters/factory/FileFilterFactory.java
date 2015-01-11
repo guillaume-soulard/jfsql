@@ -5,5 +5,5 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import fr.ogama.utils.parser.model.get.ExpressionImpl;
 
 public interface FileFilterFactory {
-	public IOFileFilter getFileFilter(ExpressionImpl expression);
+	public IOFileFilter getFileFilter(ExpressionImpl expression) throws Exception;
 }

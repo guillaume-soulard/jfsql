@@ -1,14 +1,14 @@
 package fr.ogama.utils.parser.model.get;
 
 public class PathItem {
-	private String path;
+	private Expression path;
 	private String deep;
 	
-	public String getPath() {
+	public Expression getPath() {
 		return path;
 	}
 	
-	public void setPath(String path) {
+	public void setPath(Expression path) {
 		this.path = path;
 	}
 	

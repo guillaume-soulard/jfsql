@@ -23,10 +23,8 @@ public class DefaultSorter implements SortClause {
 	}
 	
 	@Override
-	public Comparator<File> getComparator(GetClause getClause) {
-		
-		this.getClause = getClause;
-		
+	public Comparator<File> getComparator() {
+				
 		final Comparator<File> comparator = getAscendingComparator();
 		
 		if (sortOrder.equals(SortOrder.ASCENDING)) {

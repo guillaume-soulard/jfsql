@@ -33,6 +33,7 @@ import fr.ogama.jfsql.query.clause.having.operators.comparaison.In;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.LessThan;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.LessThanOrEqual;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.Like;
+import fr.ogama.jfsql.query.clause.having.operators.comparaison.Match;
 import fr.ogama.jfsql.query.clause.having.operators.comparaison.Unequal;
 import fr.ogama.utils.parser.model.get.Constant;
 import fr.ogama.utils.parser.model.get.Expression;
@@ -56,6 +57,7 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 		operatorStrategy.put("like", Like.class);
 		operatorStrategy.put("in", In.class);
 		operatorStrategy.put("between", Between.class);
+		operatorStrategy.put("match", Match.class);
 
 		propertyStrategy = new HashMap<String, PropertyFactory>();
 		propertyStrategy.put("name", new NameFileFilterFactory());
@@ -71,7 +73,7 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 		propertyStrategy.put("status", new StatusFileFilterFactory());
 	}
 
-	public IOFileFilter getFileFilter(ExpressionImpl expression) {
+	public IOFileFilter getFileFilter(ExpressionImpl expression) throws Exception {
 		try {
 			String operator = expression.getOperator().toLowerCase();
 			operator = operator.trim().replaceAll("[ ]?not[ ]?", "");
@@ -102,11 +104,11 @@ public class ComparatorFactoryStrategy implements FileFilterFactory {
 				return (IOFileFilter) propertyFileFilter;
 			}			
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
 		}
 		
 		return null;
