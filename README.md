@@ -1,4 +1,4 @@
-#JFSQL![Build Status](https://travis-ci.org/ogama/jfsql.svg)
+#JFSQL  ![Build Status](https://travis-ci.org/ogama/jfsql.svg)
 
 JFSQL (Java File System Query Language) is a Java library for querying the file system. This library provide a query language to allow external uses for exemple as shell command.
 
