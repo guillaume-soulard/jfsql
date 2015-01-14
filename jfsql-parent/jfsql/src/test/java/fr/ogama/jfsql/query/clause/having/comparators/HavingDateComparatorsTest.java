@@ -189,7 +189,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		String queryString = "get file in ('" + directory
 				+ "') having creation_date between '" + dateResuls.get(0)
-				+ "' and '" + dateResuls.get(1) + "';";
+				+ "' and '" + dateResuls.get(0) + "';";
 		Query query = QueryFactory.newQuery(queryString);
 
 		// WHEN
