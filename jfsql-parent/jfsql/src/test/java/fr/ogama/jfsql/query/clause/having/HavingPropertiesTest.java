@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,6 +20,11 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		setUp();
+	}
+
+	@AfterClass 
+	public static void tearDownAfterClass() {
+		tearDown();
 	}
 
 	@Test

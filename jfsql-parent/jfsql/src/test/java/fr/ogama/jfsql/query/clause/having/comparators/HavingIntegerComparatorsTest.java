@@ -178,7 +178,7 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 	public void should_validate_between() throws Exception {
 		// GIVEN
 		String sizeQueryString = "get 1 file in ('" + directory
-				+ "') having type = 'file' and sort by size descending;";
+				+ "') having type = 'file' sort by size descending;";
 		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
 		List<Comparable> sizeResult = sizeQuery.execute();
 		assertThat(sizeResult).hasSize(1).hasOnlyElementsOfType(File.class);

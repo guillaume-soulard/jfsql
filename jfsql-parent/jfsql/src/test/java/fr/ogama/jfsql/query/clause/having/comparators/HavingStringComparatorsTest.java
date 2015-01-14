@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.File;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,6 +18,11 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		setUp();
+	}
+
+	@AfterClass 
+	public static void tearDownAfterClass() {
+		tearDown();
 	}
 
 	@Test

@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,7 +20,12 @@ public class HavingLogicalComparatorTest extends AbstractHavingTest {
 	public static void setUpBeforeClass() throws Exception {
 		setUp();
 	}
-
+	
+	@AfterClass 
+	public static void tearDownAfterClass() {
+		tearDown();
+	}
+	
 	@Test
 	public void should_validate_and() throws Exception {
 		// GIVEN

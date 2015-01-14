@@ -58,4 +58,8 @@ public class AbstractHavingTest {
 		
 		nameFile.setWritable(true);
 	}
+	
+	public static void tearDown() {
+		regularFile.setReadable(true);
+	}
 }

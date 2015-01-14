@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,6 +21,11 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		setUp();
+	}	
+	
+	@AfterClass 
+	public static void tearDownAfterClass() {
+		tearDown();
 	}
 
 	@Test
