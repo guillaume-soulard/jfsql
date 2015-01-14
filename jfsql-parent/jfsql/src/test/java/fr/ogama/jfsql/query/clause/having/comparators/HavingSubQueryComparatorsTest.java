@@ -64,7 +64,7 @@ public class HavingSubQueryComparatorsTest extends AbstractHavingTest {
 		List<Comparable> results = fileQuery.execute();
 
 		// THEN
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 	
 	@Test

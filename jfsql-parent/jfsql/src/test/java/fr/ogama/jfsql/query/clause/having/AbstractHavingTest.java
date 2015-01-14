@@ -45,5 +45,17 @@ public class AbstractHavingTest {
 		assertThat(lastUpdateFile).isNotNull().exists().isFile();
 		assertThat(lastAccessFile).isNotNull().exists().isFile();
 		assertThat(nameFile).isNotNull().exists().isFile();
+		
+		lastUpdateFile.setExecutable(true);
+		lastAccessFile.setExecutable(true);
+		creationDateFile.setExecutable(true);
+		
+		regularFile.setReadable(false);
+		
+		bigSizeFile.setReadOnly();
+		
+		contentFile.setReadOnly();
+		
+		nameFile.setWritable(true);
 	}
 }

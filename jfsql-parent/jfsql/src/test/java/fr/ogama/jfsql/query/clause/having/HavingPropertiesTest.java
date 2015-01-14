@@ -218,14 +218,14 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 	public void should_get_names_by_status() throws Exception {
 		// GIVEN
 		String query = "get name in ('" + directory
-				+ "') having status = 'executable';";
+				+ "') having status = 'executable' and type = 'file';";
 		Query fileQuery = QueryFactory.newQuery(query);
 
 		// WHEN
 		List<Comparable> results = fileQuery.execute();
 
 		// THEN
-		assertThat(results).isNotNull().hasSize(2)
+		assertThat(results).isNotNull().hasSize(3)
 				.hasOnlyElementsOfType(String.class);
 	}
 }

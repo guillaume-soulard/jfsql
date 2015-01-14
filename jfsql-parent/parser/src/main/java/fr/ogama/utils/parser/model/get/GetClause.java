@@ -3,15 +3,15 @@ package fr.ogama.utils.parser.model.get;
 import java.util.Vector;
 
 public class GetClause {
-	private String property;
+	private Expression property;
 	private String limit;
 	private boolean distinct;
 	
-	public String getProperty() {
+	public Expression getProperty() {
 		return property;
 	}
 
-	public void setProperty(String property) {
+	public void setProperty(Expression property) {
 		this.property = property;
 	}
 

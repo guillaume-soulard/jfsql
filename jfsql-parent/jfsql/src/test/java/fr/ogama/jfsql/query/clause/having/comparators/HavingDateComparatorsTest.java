@@ -41,7 +41,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test
@@ -168,7 +168,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test
@@ -191,7 +191,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
-		assertThat(results).isNotEmpty();
+		assertThat(results).isNotNull();
 	}
 
 	@Test(expected = Exception.class)

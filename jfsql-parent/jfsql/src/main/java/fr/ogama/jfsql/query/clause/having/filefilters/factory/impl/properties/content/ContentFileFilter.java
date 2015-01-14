@@ -39,7 +39,11 @@ public class ContentFileFilter extends AbstractFileFilter {
 	@Override
 	protected Comparable getLeftValue(File file) throws ClauseException {
 		try {
-			return FilePropertyHelper.getContent(file);
+			if (file.canRead()) {
+				return FilePropertyHelper.getContent(file);
+			} else {
+				return null;
+			}
 		} catch (IOException e) {
 			throw new ClauseException(e.getMessage(), e);
 		}

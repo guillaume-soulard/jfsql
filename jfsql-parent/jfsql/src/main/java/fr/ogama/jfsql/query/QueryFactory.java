@@ -17,6 +17,7 @@ import fr.ogama.jfsql.query.clause.restriction.RestrictionLimit;
 import fr.ogama.jfsql.query.clause.sort.SortFactory;
 import fr.ogama.utils.parser.JFSQLParser;
 import fr.ogama.utils.parser.model.Statement;
+import fr.ogama.utils.parser.model.get.Constant;
 import fr.ogama.utils.parser.model.get.ExpressionImpl;
 import fr.ogama.utils.parser.model.get.GetStatement;
 
@@ -57,8 +58,14 @@ public class QueryFactory {
 
 	private static GetClause getGetClause(GetStatement getStatement)
 			throws Exception {
-		return GetClauseFactory.getInstance().getClause(
-				getStatement.getGetClause().getProperty());
+
+		if (getStatement.getGetClause().getProperty() instanceof Constant) {
+			return GetClauseFactory.getInstance().getClause(
+					((Constant) getStatement.getGetClause().getProperty())
+							.getValue());
+		} else {
+			throw new Exception("Functions not supported");
+		}
 	}
 
 	private static List<RestrictionClause> getRestrictions(
