@@ -215,7 +215,7 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		List<Comparable> results = fileQuery.execute();
 
 		// THEN
-		assertThat(results).isNotNull().hasSize(2)
+		assertThat(results).isNotNull()
 				.hasOnlyElementsOfType(String.class);
 
 	}

@@ -185,7 +185,7 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		Query dateQuery = QueryFactory.newQuery(dateQueryString);
 		List<Comparable> dateResuls = dateQuery.execute();
 
-		assertThat(dateResuls).hasSize(2).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasOnlyElementsOfType(String.class);
 
 		String queryString = "get file in ('" + directory
 				+ "') having creation_date between '" + dateResuls.get(0)
