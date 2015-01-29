@@ -1,18 +1,18 @@
 package fr.ogama.jfsql.query.clause.having.logical;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
 import fr.ogama.jfsql.query.clause.having.AbstractHavingTest;
+import fr.ogama.utils.parser.model.Statement;
 
 public class HavingLogicalComparatorTest extends AbstractHavingTest {
 
@@ -31,10 +31,10 @@ public class HavingLogicalComparatorTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory
 				+ "') having name like 'date' and name like '.txt' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(3)
@@ -47,10 +47,10 @@ public class HavingLogicalComparatorTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory
 				+ "') having name like 'date' or name like '.txt' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(7)
@@ -62,10 +62,10 @@ public class HavingLogicalComparatorTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory
 				+ "') having name not like 'date' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(4)
@@ -78,10 +78,10 @@ public class HavingLogicalComparatorTest extends AbstractHavingTest {
 		String query = "get file in ('"
 				+ directory
 				+ "') having size > 0 and type = 'file' and (content not like 'Content' or name like 'size');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(1)
@@ -94,10 +94,10 @@ public class HavingLogicalComparatorTest extends AbstractHavingTest {
 		String query = "get file in ('"
 				+ directory
 				+ "') having size > 0 ad (content not like 'Content'  name like 'content')";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 	}

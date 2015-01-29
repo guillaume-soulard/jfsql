@@ -1,21 +1,19 @@
 package fr.ogama.utils.parser;
 
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Vector;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import fr.ogama.utils.parser.model.Statement;
-import fr.ogama.utils.parser.model.get.Constant;
-import fr.ogama.utils.parser.model.get.Expression;
 import fr.ogama.utils.parser.model.get.ExpressionImpl;
-import fr.ogama.utils.parser.model.get.Function;
 import fr.ogama.utils.parser.model.get.GetStatement;
-import fr.ogama.utils.parser.model.get.HavingClause;
 import fr.ogama.utils.parser.model.get.PathItem;
+import fr.ogama.utils.parser.model.get.expressions.comparator.Equal;
+import fr.ogama.utils.parser.model.get.function.AsDate;
+import fr.ogama.utils.parser.model.get.function.AsDateString;
+import fr.ogama.utils.parser.model.get.function.Sum;
 
 public class TestParser {
 
@@ -33,31 +31,18 @@ public class TestParser {
 		assertThat(statements.get(0)).isExactlyInstanceOf(GetStatement.class);
 		GetStatement getStatement = (GetStatement) statements.get(0);
 
-		assertThat(getStatement.getGetClause().getLimit()).isEqualTo("1");
-		assertThat(getStatement.getGetClause().getProperty())
-				.isExactlyInstanceOf(Constant.class);
-		assertThat(
-				((Constant) getStatement.getGetClause().getProperty())
-						.getValue()).isEqualTo("name");
-		assertThat(
-				((Constant) getStatement.getGetClause().getProperty())
-						.getType()).isEqualTo(Constant.COLUMNNAME);
+		assertThat(getStatement.getGetClause().getLimit()).isEqualTo(1);
 		assertThat(getStatement.getGetClause().isDistinct()).isTrue();
 
 		assertThat(getStatement.getInClause().getPathItems()).hasSize(2);
 
 		PathItem pathItem1 = (PathItem) getStatement.getInClause()
 				.getPathItems().get(0);
-		assertThat(pathItem1.getDeep()).isNull();
-		assertThat(pathItem1.getPath()).isExactlyInstanceOf(Constant.class);
-		assertThat(((Constant) pathItem1.getPath()).getValue()).isEqualTo(
-				"/home/ogama");
+		assertThat(pathItem1.getDeep()).isEqualTo(Integer.MAX_VALUE);
 
 		PathItem pathItem2 = (PathItem) getStatement.getInClause()
 				.getPathItems().get(1);
-		assertThat(pathItem2.getDeep()).isEqualTo("3");
-		assertThat(((Constant) pathItem2.getPath()).getValue()).isEqualTo(
-				"/home/otherUser");
+		assertThat(pathItem2.getDeep()).isEqualTo(3);
 	}
 
 	@Test
@@ -124,8 +109,7 @@ public class TestParser {
 				.hasSize(1);
 		PathItem pathItem = (PathItem) ((GetStatement) statements.get(0))
 				.getInClause().getPathItems().get(0);
-		assertThat(pathItem.getPath()).isExactlyInstanceOf(GetStatement.class);
-		assertThat(pathItem.getDeep()).isEqualTo("2");
+		assertThat(pathItem.getDeep()).isEqualTo(2);
 	}
 
 	@Test
@@ -209,101 +193,61 @@ public class TestParser {
 	}
 
 	@Test
-	public void should_parse_aggregate_function_on_get() throws Exception {
+	public void should_parse_aggregation_function() throws Exception {
 		// GIVEN
 		JFSQLParser jfsqlParser = new JFSQLParser();
 
 		// WHEN
-		Vector<Statement> countStatements = jfsqlParser
-				.parse("get count(file) in ('/home/ogama');");
+		Vector<Statement> sumStatements = jfsqlParser
+				.parse("sum(get size in ('/home/ogama'));");
 
 		// THEN
-		assertThat(countStatements).hasSize(1);
-		assertThat(countStatements.get(0)).isExactlyInstanceOf(
+		assertThat(sumStatements).hasSize(1);
+		assertThat(sumStatements.get(0)).isExactlyInstanceOf(
+				Sum.class);
+		Sum expression = (Sum) sumStatements.get(0);
+		assertThat(expression.getOperands()).hasSize(1);
+		assertThat(expression.getOperand(0)).isExactlyInstanceOf(
 				GetStatement.class);
-		GetStatement getStatement = (GetStatement) countStatements.get(0);
-		assertThat(getStatement.getGetClause().getProperty())
-				.isExactlyInstanceOf(Function.class);
-		Function function = (Function) getStatement.getGetClause()
-				.getProperty();
-		assertThat(function.getName()).isEqualTo("count");
-		assertThat(function.getParams()).hasSize(1);
-		assertThat(function.isAggregate()).isTrue();
 	}
 
 	@Test
-	public void should_parse_normal_function_on_get() throws Exception {
+	public void should_parse_function_in_get() throws Exception {
 		// GIVEN
 		JFSQLParser jfsqlParser = new JFSQLParser();
 
 		// WHEN
 		Vector<Statement> statements = jfsqlParser
-				.parse("get concat('string', name) in ('/home/ogama');");
-
-		// THEN
-		assertThat(statements).hasSize(1);
-		assertThat(statements.get(0)).isExactlyInstanceOf(
-				GetStatement.class);
-		GetStatement getStatement = (GetStatement) statements.get(0);
-		assertThat(getStatement.getGetClause().getProperty())
-				.isExactlyInstanceOf(Function.class);
-		Function function = (Function) getStatement.getGetClause()
-				.getProperty();
-		assertThat(function.getName()).isEqualTo("concat");
-		assertThat(function.getParams()).hasSize(2);
-		assertThat(function.getParams().get(0)).isExactlyInstanceOf(
-				Constant.class);
-		assertThat(((Constant) function.getParams().get(0)).getValue())
-				.isEqualTo("string");
-		assertThat(((Constant) function.getParams().get(0)).getType())
-				.isEqualTo(Constant.STRING);
-		assertThat(function.getParams().get(1)).isExactlyInstanceOf(
-				Constant.class);
-		assertThat(((Constant) function.getParams().get(1)).getValue())
-				.isEqualTo("name");
-		assertThat(((Constant) function.getParams().get(1)).getType())
-				.isEqualTo(Constant.COLUMNNAME);
-		assertThat(function.isAggregate()).isFalse();
-	}
-
-	@Test
-	public void should_parse_function_on_having() throws Exception {
-		// GIVEN
-		JFSQLParser jfsqlParser = new JFSQLParser();
-
-		// WHEN
-		Vector<Statement> statements = jfsqlParser
-				.parse("get file in ('.') having name like concat('file', 1) and asString(creation_date, 'yyyy/mm/dd') = '2014/01/01';");
+				.parse("get asDateString(creation_date, 'yyyy/MM/dd') in ('/home/ogama');");
 
 		// THEN
 		assertThat(statements).hasSize(1);
 		assertThat(statements.get(0)).isExactlyInstanceOf(GetStatement.class);
-		HavingClause havingClause = ((GetStatement) statements.get(0)).getHavingClause();
-		assertThat(havingClause).isNotNull();
-		assertThat(havingClause.getExpression()).isExactlyInstanceOf(ExpressionImpl.class);
-		
-		// like operation
-		Expression rightExpression = ((ExpressionImpl) ((ExpressionImpl) havingClause.getExpression()).getOperand(0)).getOperand(1);
-		assertThat(rightExpression).isExactlyInstanceOf(Function.class);
-		assertThat(((Function)rightExpression).getName()).isEqualTo("concat");
-		assertThat(((Function)rightExpression).getParams()).hasSize(2);
-		assertThat(((Function)rightExpression).getParams().get(0)).isExactlyInstanceOf(Constant.class);
-		assertThat(((Constant)((Function)rightExpression).getParams().get(0)).getValue()).isEqualTo("file");
-		assertThat(((Constant)((Function)rightExpression).getParams().get(0)).getType()).isEqualTo(Constant.STRING);
-		assertThat(((Function)rightExpression).getParams().get(1)).isExactlyInstanceOf(Constant.class);
-		assertThat(((Constant)((Function)rightExpression).getParams().get(1)).getValue()).isEqualTo("1");
-		assertThat(((Constant)((Function)rightExpression).getParams().get(1)).getType()).isEqualTo(Constant.NUMBER);
-		
-		// equals operation
-		Expression leftExpression = ((ExpressionImpl) ((ExpressionImpl) havingClause.getExpression()).getOperand(1)).getOperand(0);
-		assertThat(leftExpression).isExactlyInstanceOf(Function.class);
-		assertThat(((Function)leftExpression).getName()).isEqualTo("asString");
-		assertThat(((Function)leftExpression).getParams()).hasSize(2);
-		assertThat(((Function)leftExpression).getParams().get(0)).isExactlyInstanceOf(Constant.class);
-		assertThat(((Constant)((Function)leftExpression).getParams().get(0)).getValue()).isEqualTo("creation_date");
-		assertThat(((Constant)((Function)leftExpression).getParams().get(0)).getType()).isEqualTo(Constant.COLUMNNAME);
-		assertThat(((Function)leftExpression).getParams().get(1)).isExactlyInstanceOf(Constant.class);
-		assertThat(((Constant)((Function)leftExpression).getParams().get(1)).getValue()).isEqualTo("yyyy/mm/dd");
-		assertThat(((Constant)((Function)leftExpression).getParams().get(1)).getType()).isEqualTo(Constant.STRING);
+		GetStatement statement = (GetStatement) statements.get(0);
+	}
+
+	@Test
+	public void should_parse_function_in_having() throws Exception {
+		// GIVEN
+		JFSQLParser jfsqlParser = new JFSQLParser();
+
+		// WHEN
+		Vector<Statement> statements = jfsqlParser
+				.parse("get name in ('/home/ogama') having asDate(asDateString(creation_date, 'yyyymmdd'), 'yyyymmdd') = 'other';");
+
+		// THEN
+		assertThat(statements).hasSize(1);
+		assertThat(statements.get(0)).isExactlyInstanceOf(GetStatement.class);
+		GetStatement statement = (GetStatement) statements.get(0);
+		assertThat(statement.getHavingClause().getExpression()).isExactlyInstanceOf(Equal.class);
+		assertThat(((ExpressionImpl)statement.getHavingClause().getExpression()).getOperands()).hasSize(2);
+		assertThat(((ExpressionImpl)statement.getHavingClause().getExpression()).getOperand(0)).isExactlyInstanceOf(AsDate.class);
+		ExpressionImpl expression = (ExpressionImpl) ((ExpressionImpl)statement.getHavingClause().getExpression()).getOperand(0);
+		assertThat(expression.getOperator()).isEqualTo("asDate");
+		assertThat(expression.getOperands()).hasSize(2);
+		assertThat(expression.getOperand(0)).isExactlyInstanceOf(AsDateString.class);
+		ExpressionImpl subFunction = (ExpressionImpl) expression.getOperand(0);
+		assertThat(subFunction.getOperator()).isEqualTo("asDateString");
+		assertThat(subFunction.getOperands()).hasSize(2);
 	}
 }

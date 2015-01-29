@@ -1,5 +1,7 @@
 package fr.ogama.utils.parser.model.get;
 
-public interface Expression {
+import fr.ogama.utils.parser.model.Statement;
+
+public interface Expression extends Statement {
 	
 }

@@ -19,7 +19,7 @@ public interface JFSQLJJParserConstants {
   /** RegularExpression Id. */
   int K_DEEP = 8;
   /** RegularExpression Id. */
-  int K_ = 9;
+  int K_HAVING = 9;
   /** RegularExpression Id. */
   int K_SORT = 10;
   /** RegularExpression Id. */
@@ -49,45 +49,49 @@ public interface JFSQLJJParserConstants {
   /** RegularExpression Id. */
   int K_COUNT = 23;
   /** RegularExpression Id. */
-  int K_PRIOR = 24;
+  int K_SELECT = 24;
   /** RegularExpression Id. */
-  int K_ANY = 25;
+  int K_ASCENDING = 25;
   /** RegularExpression Id. */
-  int K_NULL = 26;
+  int K_DESCENDING = 26;
   /** RegularExpression Id. */
-  int K_ALL = 27;
+  int K_ASDATESTRING = 27;
   /** RegularExpression Id. */
-  int K_EXISTS = 28;
+  int K_ASDATE = 28;
   /** RegularExpression Id. */
-  int K_SELECT = 29;
+  int K_ASINTEGER = 29;
   /** RegularExpression Id. */
-  int K_ASCENDING = 30;
+  int K_ASLONG = 30;
   /** RegularExpression Id. */
-  int K_DESCENDING = 31;
+  int K_ASCONCAT = 31;
   /** RegularExpression Id. */
-  int S_NUMBER = 32;
+  int K_ASEXTRACT = 32;
   /** RegularExpression Id. */
-  int FLOAT = 33;
+  int K_ASSTRING = 33;
   /** RegularExpression Id. */
-  int INTEGER = 34;
+  int S_NUMBER = 34;
   /** RegularExpression Id. */
-  int DIGIT = 35;
+  int FLOAT = 35;
   /** RegularExpression Id. */
-  int LINE_COMMENT = 36;
+  int INTEGER = 36;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 37;
+  int DIGIT = 37;
   /** RegularExpression Id. */
-  int S_IDENTIFIER = 38;
+  int LINE_COMMENT = 38;
   /** RegularExpression Id. */
-  int LETTER = 39;
+  int MULTI_LINE_COMMENT = 39;
   /** RegularExpression Id. */
-  int SPECIAL_CHARS = 40;
+  int S_IDENTIFIER = 40;
   /** RegularExpression Id. */
-  int S_BIND = 41;
+  int LETTER = 41;
   /** RegularExpression Id. */
-  int S_CHAR_LITERAL = 42;
+  int SPECIAL_CHARS = 42;
   /** RegularExpression Id. */
-  int S_QUOTED_IDENTIFIER = 43;
+  int S_BIND = 43;
+  /** RegularExpression Id. */
+  int S_CHAR_LITERAL = 44;
+  /** RegularExpression Id. */
+  int S_QUOTED_IDENTIFIER = 45;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -118,14 +122,16 @@ public interface JFSQLJJParserConstants {
     "\"MAX\"",
     "\"SUM\"",
     "\"COUNT\"",
-    "\"PRIOR\"",
-    "\"ANY\"",
-    "\"NULL\"",
-    "\"ALL\"",
-    "\"EXISTS\"",
     "\"SELECT\"",
     "\"ASCENDING\"",
     "\"DESCENDING\"",
+    "\"ASDATESTRING\"",
+    "\"ASDATE\"",
+    "\"ASINTEGER\"",
+    "\"ASLONG\"",
+    "\"CONCAT\"",
+    "\"EXTRACT\"",
+    "\"ASSTRING\"",
     "<S_NUMBER>",
     "<FLOAT>",
     "<INTEGER>",

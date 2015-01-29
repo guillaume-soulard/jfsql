@@ -1,17 +1,15 @@
 package fr.ogama.jfsql.query.clause.get;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
+import fr.ogama.utils.parser.model.Statement;
 
 public class GetLimitTest {
 
@@ -28,29 +26,29 @@ public class GetLimitTest {
 		// GIVEN
 		String fileOrDirectory = "get 2 file in ('"
 				+ getTestDirectory + "');";
-		Query fileOrDirectoryQuery = QueryFactory.newQuery(fileOrDirectory);
+		Statement fileOrDirectoryQuery = JFSQL.parseOneStatement(fileOrDirectory);
 
 		// WHEN
 		List<Comparable> fileOrDirectoryResults = fileOrDirectoryQuery
-				.execute();
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(fileOrDirectoryResults).isNotNull().hasSize(2);
 	}
 	
-	@Test
+	@Test(expected = Exception.class)
 	public void should_get_0_files_and_directories() throws Exception {
 		// GIVEN
 		String fileOrDirectory = "get 0 file in ('"
 				+ getTestDirectory + "');";
-		Query fileOrDirectoryQuery = QueryFactory.newQuery(fileOrDirectory);
+		Statement fileOrDirectoryQuery = JFSQL.parseOneStatement(fileOrDirectory);
 
 		// WHEN
 		List<Comparable> fileOrDirectoryResults = fileOrDirectoryQuery
-				.execute();
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
-		assertThat(fileOrDirectoryResults).isNotNull().isEmpty();
+		// exception must be throw
 	}
 	
 	@Test(expected = Exception.class)
@@ -58,7 +56,7 @@ public class GetLimitTest {
 		// GIVEN
 		String fileOrDirectory = "get -1 file in ('"
 				+ getTestDirectory + "');";
-		Query fileOrDirectoryQuery = QueryFactory.newQuery(fileOrDirectory);
+		Statement fileOrDirectoryQuery = JFSQL.parseOneStatement(fileOrDirectory);
 
 		// WHEN
 
@@ -70,11 +68,11 @@ public class GetLimitTest {
 		// GIVEN
 		String fileOrDirectory = "get one file or directory in ('"
 				+ getTestDirectory + "');";
-		Query fileOrDirectoryQuery = QueryFactory.newQuery(fileOrDirectory);
+		Statement fileOrDirectoryQuery = JFSQL.parseOneStatement(fileOrDirectory);
 
 		// WHEN
 		List<Comparable> fileOrDirectoryResults = fileOrDirectoryQuery
-				.execute();
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 	}

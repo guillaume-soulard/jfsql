@@ -1,17 +1,17 @@
 package fr.ogama.jfsql.query.clause.in;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
+import fr.ogama.utils.parser.JFSQLExecutionException;
+import fr.ogama.utils.parser.model.Statement;
 
 public class InTest {
 
@@ -46,10 +46,10 @@ public class InTest {
 	public void should_get_in_given_directory() throws Exception {
 		// GIVEN
 		String query = "get file in('" + inDirectory1 + "') having type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(results).isNotNull().hasSize(1);
@@ -59,10 +59,10 @@ public class InTest {
 	@Test
 	public void should_get_directories_in_current_directory() throws Exception {
 		String query = "get file in ('.');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(results).isNotNull();
@@ -71,10 +71,10 @@ public class InTest {
 	@Test
 	public void should_get_in_given_directories() throws Exception {
 		String query = "get file in ('" + inDirectory1 + "', '" + inDirectory2 + "') having type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(results).isNotNull().hasSize(2);
@@ -84,10 +84,10 @@ public class InTest {
 	@Test(expected = Exception.class)
 	public void should_get_error_because_directory_not_exists() throws Exception {
 		String query = "get file in ('/directory/not/exists');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 	}
@@ -95,10 +95,10 @@ public class InTest {
 	@Test(expected = Exception.class)
 	public void should_get_error_because_directories_not_exists() throws Exception {
 		String query = "get file in ('/directory/not/exists', '/and/this/too');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 	}
@@ -106,10 +106,10 @@ public class InTest {
 	@Test(expected = Exception.class)
 	public void should_get_error_because_one_directory_not_exists() throws Exception {
 		String query = "get file in ('/directory/not/exists', '" + inDirectory1 + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 	}
@@ -117,7 +117,7 @@ public class InTest {
 	@Test(expected = Exception.class)
 	public void should_get_error_because_synthax_error_quote() throws Exception {
 		String query = "get file in (" + inDirectory1 + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
 		
@@ -127,7 +127,7 @@ public class InTest {
 	@Test(expected = Exception.class)
 	public void should_get_error_because_synthax_error_parenthesis() throws Exception {
 		String query = "get file in '" + inDirectory1 + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
 		
@@ -137,7 +137,7 @@ public class InTest {
 	@Test(expected = Exception.class)
 	public void should_get_error_because_synthax_error_no_path_specified() throws Exception {
 		String query = "get file in ();";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
 		
@@ -147,10 +147,10 @@ public class InTest {
 	@Test(expected = Exception.class)
 	public void should_get_error_on_execute_query_because_empty() throws Exception {
 		String query = "get file in ('');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 				
 		// THEN
 	}
@@ -158,10 +158,10 @@ public class InTest {
 	@Test
 	public void should_get_directories_in_root() throws Exception {
 		String query = "get file in ('/' deep 1) having type = 'directory';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(results).isNotEmpty().hasOnlyElementsOfType(File.class);
@@ -170,14 +170,14 @@ public class InTest {
 	@Test
 	public void should_get_file_in_in_sub_query() throws Exception {
 		String directoryQueryString = "get 2 file in ('.' deep 1) having type = 'directory'";
-		Query directoryQuery = QueryFactory.newQuery(directoryQueryString + ";");
+		Statement directoryQuery = JFSQL.parseOneStatement(directoryQueryString + ";");
 		
 		String query = "get file in (" + directoryQueryString + " deep 1);";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 		
 		// WHEN
-		List<Comparable> dirResults = directoryQuery.execute();
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> dirResults = directoryQuery.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(results).isNotEmpty();

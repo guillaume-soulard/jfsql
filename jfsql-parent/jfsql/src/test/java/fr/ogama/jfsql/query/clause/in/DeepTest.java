@@ -1,17 +1,16 @@
 package fr.ogama.jfsql.query.clause.in;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
+import fr.ogama.utils.parser.model.Statement;
 
 public class DeepTest {
 
@@ -51,10 +50,10 @@ public class DeepTest {
 		// GIVEN
 		String query = "get file in ('" + inDirectory1 + "' deep 2, '"
 				+ inDirectory2 + "' deep 2, '" + inDirectory3 + "' deep 2) having type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
-
+		Statement fileQuery = JFSQL.parseOneStatement(query);
+		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(1);
@@ -66,10 +65,10 @@ public class DeepTest {
 		// GIVEN
 		String query = "get file in ('" + inDirectory1 + "', '" + inDirectory2
 				+ "', '" + inDirectory3 + "') having type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
-
+		Statement fileQuery = JFSQL.parseOneStatement(query);
+		
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(3);
@@ -81,10 +80,10 @@ public class DeepTest {
 		// GIVEN
 		String query = "get file in ('" + inDirectory1 + "', '" + inDirectory2
 				+ "' deep -1, '" + inDirectory3 + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(3);

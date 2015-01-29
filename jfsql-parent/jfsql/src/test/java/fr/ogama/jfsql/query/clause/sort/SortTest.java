@@ -3,13 +3,14 @@ package fr.ogama.jfsql.query.clause.sort;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
+import fr.ogama.utils.parser.model.Statement;
 
 public class SortTest {
 
@@ -35,14 +36,14 @@ public class SortTest {
 	public void should_get_in_ascending_and_descending_order() throws Exception {
 		// GIVEN		
 		String ascendingQuery = "get file in('" + nameDirectory + "') sort by name ascending;";
-		Query ascendingFileQuery = QueryFactory.newQuery(ascendingQuery);
+		Statement ascendingFileQuery = JFSQL.parseOneStatement(ascendingQuery);
 		
 		String descendingQuery = "get file in('" + nameDirectory + "') sort by name descending;";
-		Query descendingFileQuery = QueryFactory.newQuery(descendingQuery);
+		Statement descendingFileQuery = JFSQL.parseOneStatement(descendingQuery);
 		
 		// WHEN
-		List<Comparable> ascendingResults = ascendingFileQuery.execute();
-		List<Comparable> descendingResults = descendingFileQuery.execute();
+		List<Comparable> ascendingResults = ascendingFileQuery.execute(new HashMap<String, Comparable>());
+		List<Comparable> descendingResults = descendingFileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(ascendingResults).isNotNull().hasSize(3);
@@ -56,14 +57,14 @@ public class SortTest {
 	public void should_get_with_limit() throws Exception {
 		// GIVEN		
 		String ascendingQuery = "get 2 file in('" + nameDirectory + "') sort by name ascending;";
-		Query ascendingFileQuery = QueryFactory.newQuery(ascendingQuery);
+		Statement ascendingFileQuery = JFSQL.parseOneStatement(ascendingQuery);
 		
 		String descendingQuery = "get 2 file in('" + nameDirectory + "') sort by name descending;";
-		Query descendingFileQuery = QueryFactory.newQuery(descendingQuery);
+		Statement descendingFileQuery = JFSQL.parseOneStatement(descendingQuery);
 		
 		// WHEN
-		List<Comparable> ascendingResults = ascendingFileQuery.execute();
-		List<Comparable> descendingResults = descendingFileQuery.execute();
+		List<Comparable> ascendingResults = ascendingFileQuery.execute(new HashMap<String, Comparable>());
+		List<Comparable> descendingResults = descendingFileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(ascendingResults).isNotNull().hasSize(2);
@@ -77,10 +78,10 @@ public class SortTest {
 	public void should_get_root_directories_size_sorted() throws Exception {
 		// GIVEN		
 		String ascendingQuery = "get size in('/' deep 1) sort by size ascending;";
-		Query ascendingFileQuery = QueryFactory.newQuery(ascendingQuery);
+		Statement ascendingFileQuery = JFSQL.parseOneStatement(ascendingQuery);
 		
 		// WHEN
-		List<Comparable> ascendingResults = ascendingFileQuery.execute();
+		List<Comparable> ascendingResults = ascendingFileQuery.execute(new HashMap<String, Comparable>());
 		
 		// THEN
 		assertThat(ascendingResults).isNotEmpty();

@@ -1,19 +1,24 @@
 package fr.ogama.jfsql.query.clause.having;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.JFSQLUtils;
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
-import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.FilePropertyHelper;
+import fr.ogama.jfsql.JFSQL;
+import fr.ogama.utils.parser.model.Statement;
+import fr.ogama.utils.parser.model.get.FilePropertiesUtils;
 
 public class HavingPropertiesTest extends AbstractHavingTest {
 
@@ -22,7 +27,7 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		setUp();
 	}
 
-	@AfterClass 
+	@AfterClass
 	public static void tearDownAfterClass() {
 		tearDown();
 	}
@@ -32,10 +37,11 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory
 				+ "') having name like 'date'; and type = 'file'";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(3)
@@ -47,10 +53,11 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory + "') having path = '"
 				+ regularFile.getPath() + "' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(1)
@@ -62,10 +69,11 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory + "') having parent in ('"
 				+ new File(directory).getName() + "') and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(7)
@@ -75,18 +83,22 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 	@Test
 	public void should_get_only_files_by_owner() throws Exception {
 		// GIVEN
-		Query ownerQuery = QueryFactory.newQuery("get distinct owner in ('"
-				+ directory + "') having type = 'file';");
-		List<Comparable> ownerResult = ownerQuery.execute();
+		Statement ownerQuery = JFSQL
+				.parseOneStatement("get distinct owner in ('" + directory
+						+ "') having type = 'file';");
+
+		List<Comparable> ownerResult = ownerQuery
+				.execute(new HashMap<String, Comparable>());
 		assertThat(ownerResult).isNotNull().hasSize(1)
 				.hasOnlyElementsOfType(String.class);
 
 		String query = "get file in ('" + directory + "') having owner = '"
 				+ String.valueOf(ownerResult.get(0)) + "' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(7)
@@ -98,10 +110,11 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory
 				+ "') having size > 0 and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(2)
@@ -111,19 +124,22 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 	@Test
 	public void should_get_only_files_by_creation_date() throws Exception {
 		// GIVEN
-		String regularFileCreationDate = JFSQLUtils
-				.dateToString(FilePropertyHelper.getCreationDate(regularFile));
-		String creationFileCreationDate = JFSQLUtils
-				.dateToString(FilePropertyHelper
-						.getCreationDate(creationDateFile));
+		List<Comparable> creationResult = JFSQL.parseOneStatement(
+				"get creation_date in('" + directory
+						+ "');").execute(
+				new HashMap<String, Comparable>());
 
 		String query = "get file in ('" + directory
-				+ "') having creation_date in ('" + regularFileCreationDate
-				+ "', '" + creationFileCreationDate + "') and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+				+ "') having asDate(creation_date, 'yyyyMMdd') in (asDate('"
+				+ formatDate_yyyyMMdd((Date) creationResult.get(0))
+				+ "', 'yyyyMMdd'), asDate('"
+				+ formatDate_yyyyMMdd((Date) creationResult.get(0))
+				+ "', 'yyyyMMdd'));";
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty().hasOnlyElementsOfType(File.class);
@@ -132,17 +148,20 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 	@Test
 	public void should_get_only_files_by_update_date() throws Exception {
 		// GIVEN
-		String regularFileUpdateDate = JFSQLUtils
-				.dateToString(FilePropertyHelper
-						.getLastModificationDate(regularFile));
+		List<Comparable> lastUpdateResult = JFSQL.parseOneStatement(
+				"get distinct last_update_date in('" + directory
+						+ "') sort by last_update_date ascending;").execute(
+				new HashMap<String, Comparable>());
 
 		String query = "get file in ('" + directory
-				+ "') having last_update_date = '" + regularFileUpdateDate
-				+ "' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+				+ "') having asDate(last_update_date, 'yyyyMMdd') = asDate('"
+				+ formatDate_yyyyMMdd((Date) lastUpdateResult.get(0))
+				+ "', 'yyyyMMdd');";
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty().hasOnlyElementsOfType(File.class);
@@ -152,20 +171,24 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 	@Test
 	public void should_get_only_files_by_access_date() throws Exception {
 		// GIVEN
-		String accessFileAccessDate = JFSQLUtils
-				.dateToString(FilePropertyHelper
-						.getLastAccessDate(lastAccessFile));
+		List<Comparable> lastAccessResult = JFSQL.parseOneStatement(
+				"get distinct last_access_date in('" + directory
+						+ "') sort by last_access_date ascending;").execute(
+				new HashMap<String, Comparable>());
 
-		String regularFileAccessDate = JFSQLUtils
-				.dateToString(FilePropertyHelper.getLastAccessDate(regularFile));
-
-		String query = "get file in ('" + directory
-				+ "') having last_access_date between '" + accessFileAccessDate
-				+ "' and '" + regularFileAccessDate + "' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		String query = "get file in ('"
+				+ directory
+				+ "') having asDate(last_access_date, 'yyyyMMdd') between asDate('"
+				+ formatDate_yyyyMMdd((Date) lastAccessResult.get(0))
+				+ "', 'yyyyMMdd') and asDate('"
+				+ formatDate_yyyyMMdd((Date) lastAccessResult
+						.get(lastAccessResult.size() - 1))
+				+ "', 'yyyyMMdd');";
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty().hasOnlyElementsOfType(File.class);
@@ -177,10 +200,11 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get file in ('" + directory
 				+ "') having content like 'Content' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(1)
@@ -193,10 +217,11 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get name in ('" + directory
 				+ "') having type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(7)
@@ -209,14 +234,14 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get name in ('" + directory
 				+ "') having type = 'directory';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
-		assertThat(results).isNotNull()
-				.hasOnlyElementsOfType(String.class);
+		assertThat(results).isNotNull().hasOnlyElementsOfType(String.class);
 
 	}
 
@@ -225,13 +250,26 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 		// GIVEN
 		String query = "get name in ('" + directory
 				+ "') having status = 'executable' and type = 'file';";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().hasSize(3)
 				.hasOnlyElementsOfType(String.class);
+	}
+
+	private String formatDate_yyyyMMdd(Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		return dateFormat.format(date);
+	}
+
+	private Date addSeconds(Date date, int seconds) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.SECOND, seconds);
+		return cal.getTime();
 	}
 }

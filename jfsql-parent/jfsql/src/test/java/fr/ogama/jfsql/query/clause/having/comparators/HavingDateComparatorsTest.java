@@ -1,20 +1,20 @@
 package fr.ogama.jfsql.query.clause.having.comparators;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
 import fr.ogama.jfsql.query.clause.having.AbstractHavingTest;
+import fr.ogama.utils.parser.model.Statement;
 
 public class HavingDateComparatorsTest extends AbstractHavingTest {
 
@@ -33,17 +33,17 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String dateQueryString = "get 1 creation_date in ('" + directory
 				+ "') sort by creation_date ascending;";
-		Query dateQuery = QueryFactory.newQuery(dateQueryString);
-		List<Comparable> dateResuls = dateQuery.execute();
+		Statement dateQuery = JFSQL.parseOneStatement(dateQueryString);
+		List<Comparable> dateResuls = dateQuery.execute(new HashMap<String, Comparable>());
 
-		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(Date.class);
 
 		String queryString = "get file in ('" + directory
 				+ "') having creation_date = '" + dateResuls.get(0) + "';";
-		Query query = QueryFactory.newQuery(queryString);
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -55,17 +55,17 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String dateQueryString = "get 1 creation_date in ('" + directory
 				+ "') sort by creation_date ascending;";
-		Query dateQuery = QueryFactory.newQuery(dateQueryString);
-		List<Comparable> dateResuls = dateQuery.execute();
+		Statement dateQuery = JFSQL.parseOneStatement(dateQueryString);
+		List<Comparable> dateResuls = dateQuery.execute(new HashMap<String, Comparable>());
 
-		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(Date.class);
 
 		String queryString = "get file in ('" + directory
 				+ "') having creation_date <> '" + dateResuls.get(0) + "';";
-		Query query = QueryFactory.newQuery(queryString);
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -79,10 +79,10 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 				+ directory
 				+ "') having creation_date in (get 2 distinct creation_date in ('"
 				+ directory + "') sort by creation_date descending);";
-		Query query = QueryFactory.newQuery(queryString);
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -94,17 +94,17 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String dateQueryString = "get 1 creation_date in ('" + directory
 				+ "') sort by creation_date ascending;";
-		Query dateQuery = QueryFactory.newQuery(dateQueryString);
-		List<Comparable> dateResuls = dateQuery.execute();
+		Statement dateQuery = JFSQL.parseOneStatement(dateQueryString);
+		List<Comparable> dateResuls = dateQuery.execute(new HashMap<String, Comparable>());
 
-		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(Date.class);
 
 		String queryString = "get file in ('" + directory
-				+ "') having creation_date > '" + dateResuls.get(0) + "';";
-		Query query = QueryFactory.newQuery(queryString);
+				+ "') having creation_date > asDate('" + formatDate_yyyyMMdd((Date) dateResuls.get(0)) + "', 'yyyyMMdd');";
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -116,17 +116,17 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String dateQueryString = "get 1 creation_date in ('" + directory
 				+ "') sort by creation_date ascending;";
-		Query dateQuery = QueryFactory.newQuery(dateQueryString);
-		List<Comparable> dateResuls = dateQuery.execute();
+		Statement dateQuery = JFSQL.parseOneStatement(dateQueryString);
+		List<Comparable> dateResuls = dateQuery.execute(new HashMap<String, Comparable>());
 
-		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(Date.class);
 
 		String queryString = "get file in ('" + directory
-				+ "') having creation_date >= '" + dateResuls.get(0) + "';";
-		Query query = QueryFactory.newQuery(queryString);
+				+ "') having creation_date >= asDate('" + formatDate_yyyyMMdd((Date) dateResuls.get(0)) + "', 'yyyyMMdd');";
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -138,17 +138,17 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String dateQueryString = "get 1 creation_date in ('" + directory
 				+ "') sort by creation_date descending;";
-		Query dateQuery = QueryFactory.newQuery(dateQueryString);
-		List<Comparable> dateResuls = dateQuery.execute();
+		Statement dateQuery = JFSQL.parseOneStatement(dateQueryString);
+		List<Comparable> dateResuls = dateQuery.execute(new HashMap<String, Comparable>());
 
-		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(Date.class);
 
 		String queryString = "get file in ('" + directory
-				+ "') having creation_date < '" + dateResuls.get(0) + "';";
-		Query query = QueryFactory.newQuery(queryString);
+				+ "') having creation_date < asDate('" + formatDate_yyyyMMdd((Date) dateResuls.get(0)) + "', 'yyyyMMdd');";
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -160,17 +160,17 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String dateQueryString = "get 1 creation_date in ('" + directory
 				+ "') sort by creation_date ascending;";
-		Query dateQuery = QueryFactory.newQuery(dateQueryString);
-		List<Comparable> dateResuls = dateQuery.execute();
+		Statement dateQuery = JFSQL.parseOneStatement(dateQueryString);
+		List<Comparable> dateResuls = dateQuery.execute(new HashMap<String, Comparable>());
 
-		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasSize(1).hasOnlyElementsOfType(Date.class);
 
 		String queryString = "get file in ('" + directory
-				+ "') having creation_date <= '" + dateResuls.get(0) + "';";
-		Query query = QueryFactory.newQuery(queryString);
+				+ "') having creation_date <= asDate('" + formatDate_yyyyMMdd((Date) dateResuls.get(0)) + "', 'yyyyMMdd');";
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -182,18 +182,18 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String dateQueryString = "get 2 distinct creation_date in ('"
 				+ directory + "') sort by creation_date ascending;";
-		Query dateQuery = QueryFactory.newQuery(dateQueryString);
-		List<Comparable> dateResuls = dateQuery.execute();
+		Statement dateQuery = JFSQL.parseOneStatement(dateQueryString);
+		List<Comparable> dateResuls = dateQuery.execute(new HashMap<String, Comparable>());
 
-		assertThat(dateResuls).hasOnlyElementsOfType(String.class);
+		assertThat(dateResuls).hasOnlyElementsOfType(Date.class);
 
 		String queryString = "get file in ('" + directory
-				+ "') having creation_date between '" + dateResuls.get(0)
-				+ "' and '" + dateResuls.get(0) + "';";
-		Query query = QueryFactory.newQuery(queryString);
+				+ "') having creation_date between asDate('" + formatDate_yyyyMMdd((Date) dateResuls.get(0))
+				+ "', 'yyyyMMdd') and asDate('" + formatDate_yyyyMMdd((Date) dateResuls.get(0)) + "', 'yyyyMMdd');";
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -205,10 +205,10 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String queryString = "get file in ('" + directory
 				+ "') having creation_date like '2015-01-01 12-02-33';";
-		Query query = QueryFactory.newQuery(queryString);
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		// Exception must be throw
@@ -219,12 +219,17 @@ public class HavingDateComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String queryString = "get file in ('" + directory
 				+ "') having creation_date match '.*';";
-		Query query = QueryFactory.newQuery(queryString);
+		Statement query = JFSQL.parseOneStatement(queryString);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		// Exception must be throw
+	}
+	
+	private String formatDate_yyyyMMdd(Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		return dateFormat.format(date);
 	}
 }

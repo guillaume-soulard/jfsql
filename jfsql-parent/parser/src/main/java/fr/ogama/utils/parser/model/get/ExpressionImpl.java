@@ -1,11 +1,15 @@
 package fr.ogama.utils.parser.model.get;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+
+import fr.ogama.utils.parser.JFSQLExecutionException;
 
 public class ExpressionImpl implements Expression {
 
 	String operator = null;
-	Vector operands = null;
+	Vector<Expression> operands = null;
 
 	public ExpressionImpl(String operator) {
 		this.operator = new String(operator);
@@ -38,7 +42,7 @@ public class ExpressionImpl implements Expression {
 	 * @param v
 	 *            A vector that contains all operands (ZExp objects).
 	 */
-	public void setOperands(Vector v) {
+	public void setOperands(Vector<Expression> v) {
 		operands = v;
 	}
 
@@ -47,7 +51,7 @@ public class ExpressionImpl implements Expression {
 	 * 
 	 * @return the operands (as a Vector of ZExp objects).
 	 */
-	public Vector getOperands() {
+	public Vector<Expression> getOperands() {
 		return operands;
 	}
 
@@ -59,7 +63,7 @@ public class ExpressionImpl implements Expression {
 	 */
 	public void addOperand(Expression o) {
 		if (operands == null)
-			operands = new Vector();
+			operands = new Vector<Expression>();
 		operands.addElement(o);
 	}
 
@@ -85,5 +89,10 @@ public class ExpressionImpl implements Expression {
 		if (operands == null)
 			return 0;
 		return operands.size();
+	}
+
+
+	public List<Comparable> execute(Map<String, Comparable> params) throws JFSQLExecutionException {
+		throw new RuntimeException("Unimplemented");
 	}
 }

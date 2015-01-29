@@ -1,17 +1,16 @@
 package fr.ogama.jfsql.query.clause.get;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
+import fr.ogama.utils.parser.model.Statement;
 
 public class GetDistinctTest {
 
@@ -46,10 +45,10 @@ public class GetDistinctTest {
 	public void should_get_parent_with_no_double() throws Exception {
 		// GIVEN
 		String query = "get distinct parent in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
@@ -69,10 +68,10 @@ public class GetDistinctTest {
 	public void should_get_size_with_no_double() throws Exception {
 		// GIVEN
 		String query = "get distinct size in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
@@ -88,10 +87,10 @@ public class GetDistinctTest {
 	public void should_get_owner_with_no_double() throws Exception {
 		// GIVEN
 		String query = "get distinct owner in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
@@ -107,10 +106,10 @@ public class GetDistinctTest {
 	public void should_get_error_on_incorrect_string() throws Exception {
 		// GIVEN
 		String query = "get string owner in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery.execute(new HashMap<String, Comparable>());
 
 		// THEN
 	}

@@ -1,19 +1,19 @@
 package fr.ogama.jfsql.query.clause.get;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.FileType;
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
-import fr.ogama.jfsql.query.Status;
+import fr.ogama.jfsql.JFSQL;
+import fr.ogama.utils.parser.model.Statement;
+import fr.ogama.utils.parser.model.get.FileStatus;
+import fr.ogama.utils.parser.model.get.FileType;
 
 public class GetTest {
 
@@ -48,32 +48,34 @@ public class GetTest {
 	public void should_get_files_and_directories() throws Exception {
 		// GIVEN
 		String file = "get file in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(file);
+		Statement fileQuery = JFSQL.parseOneStatement(file);
 
 		// WHEN
-		List<Comparable> fileResults = fileQuery.execute();
+		List<Comparable> fileResults = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(fileResults).isNotNull().isNotEmpty();
 
 		assertThat(fileResults).hasOnlyElementsOfType(File.class);
 
-		assertThat(fileResults).containsOnly(folder1, folder11,
-				folder2, file1, file2);
+		assertThat(fileResults).containsOnly(folder1, folder11, folder2, file1,
+				file2);
 
 		for (Comparable result : fileResults) {
 			assertThat(((File) result)).exists();
 		}
 	}
-	
+
 	@Test
 	public void should_get_names() throws Exception {
 		// GIVEN
 		String query = "get name in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
@@ -89,20 +91,17 @@ public class GetTest {
 	@Test
 	public void should_get_parent() throws Exception {
 		// GIVEN
-		String query = "get parent in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		String query = "get distinct parent in ('" + getTestDirectory + "' deep 1);";
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
 		assertThat(results).hasOnlyElementsOfType(String.class);
-		assertThat(results).containsOnly(folder1.getParentFile().getName(),
-				folder11.getParentFile().getName(),
-				folder2.getParentFile().getName(),
-				file1.getParentFile().getName(),
-				file2.getParentFile().getName());
+		assertThat(results).containsOnly(new File(getTestDirectory).getName());
 
 		for (Comparable result : results) {
 			assertThat((String) result).isNotEmpty();
@@ -113,10 +112,11 @@ public class GetTest {
 	public void should_get_path() throws Exception {
 		// GIVEN
 		String query = "get path in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
@@ -134,70 +134,56 @@ public class GetTest {
 	public void should_get_creation_date() throws Exception {
 		// GIVEN
 		String query = "get creation_date in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
-		assertThat(results).hasOnlyElementsOfType(String.class);
-
-		for (Comparable result : results) {
-			assertThat((String) result).isNotEmpty();
-			assertThat((String) result).matches(
-					"[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
-		}
+		assertThat(results).hasOnlyElementsOfType(Date.class);
 	}
 
 	@Test
 	public void should_get_last_update_date() throws Exception {
 		// GIVEN
 		String query = "get last_update_date in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
-		assertThat(results).hasOnlyElementsOfType(String.class);
-
-		for (Comparable result : results) {
-			assertThat((String) result).isNotEmpty();
-			assertThat((String) result).matches(
-					"[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
-		}
+		assertThat(results).hasOnlyElementsOfType(Date.class);
 	}
 
 	@Test
 	public void should_get_last_access_date() throws Exception {
 		// GIVEN
 		String query = "get last_access_date in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
-		assertThat(results).hasOnlyElementsOfType(String.class);
-
-		for (Comparable result : results) {
-			assertThat((String) result).isNotEmpty();
-			assertThat((String) result).matches(
-					"[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
-		}
+		assertThat(results).hasOnlyElementsOfType(Date.class);
 	}
 
 	@Test
 	public void should_get_size() throws Exception {
 		// GIVEN
 		String query = "get size in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
@@ -212,10 +198,11 @@ public class GetTest {
 	public void should_get_owner() throws Exception {
 		// GIVEN
 		String query = "get owner in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
@@ -230,10 +217,11 @@ public class GetTest {
 	public void should_get_type() throws Exception {
 		// GIVEN
 		String query = "get type in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty();
@@ -250,10 +238,11 @@ public class GetTest {
 	public void should_get_status() throws Exception {
 		// GIVEN
 		String query = "get status in ('" + getTestDirectory + "');";
-		Query fileQuery = QueryFactory.newQuery(query);
+		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN
-		List<Comparable> results = fileQuery.execute();
+		List<Comparable> results = fileQuery
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty();
@@ -261,9 +250,11 @@ public class GetTest {
 
 		for (Comparable result : results) {
 			assertThat((String) result).isNotEmpty();
-			assertThat((String) result).isIn(Status.NONE.getLabel(),
-					Status.READABLE.getLabel(), Status.WRITABLE.getLabel(),
-					Status.EXECUTABLE.getLabel());
+			assertThat((String) result).isIn(
+					FileStatus.UNACCISSIBLE.getLabel(),
+					FileStatus.READABLE.getLabel(),
+					FileStatus.WRITABLE.getLabel(),
+					FileStatus.EXECUTABLE.getLabel());
 		}
 	}
 }

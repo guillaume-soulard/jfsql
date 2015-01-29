@@ -1,19 +1,18 @@
 package fr.ogama.jfsql.query.clause.having.comparators;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.ogama.jfsql.query.JFSQLUtils;
-import fr.ogama.jfsql.query.Query;
-import fr.ogama.jfsql.query.QueryFactory;
+import fr.ogama.jfsql.JFSQL;
 import fr.ogama.jfsql.query.clause.having.AbstractHavingTest;
-import fr.ogama.jfsql.query.clause.having.filefilters.factory.impl.properties.FilePropertyHelper;
+import fr.ogama.utils.parser.model.Statement;
+import fr.ogama.utils.parser.model.get.FilePropertiesUtils;
 
 public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 
@@ -27,16 +26,16 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 1 file in ('" + directory
 				+ "') sort by size descending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(1).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory + "') having size = "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(0)) + ";";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(0)) + ";";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -48,16 +47,16 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 1 file in ('" + directory
 				+ "') sort by size ascending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(1).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory + "') having size <> "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(0)) + ";";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(0)) + ";";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -69,17 +68,17 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 2 file in ('" + directory
 				+ "') having type = 'file' sort by size descending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(2).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory + "') having size in ("
-				+ FilePropertyHelper.getSize((File) sizeResult.get(0)) + ", "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(1)) + ");";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(0)) + ", "
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(1)) + ");";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -91,17 +90,17 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 2 file in ('" + directory
 				+ "') sort by size descending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(2).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory
 				+ "') having type = 'file' and size > "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(1)) + ";";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(1)) + ";";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -113,17 +112,17 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 2 file in ('" + directory
 				+ "') having type = 'file' sort by size descending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(2).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory
 				+ "') having type = 'file' and size >= "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(1)) + ";";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(1)) + ";";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -135,17 +134,17 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 2 file in ('" + directory
 				+ "') sort by size ascending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(2).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory
 				+ "') having type = 'file' and size < "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(0)) + ";";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(0)) + ";";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -157,17 +156,17 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 2 file in ('" + directory
 				+ "') having type = 'file' sort by size descending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(2).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory
 				+ "') having type = 'file' and size <= "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(1)) + ";";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(1)) + ";";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -179,17 +178,17 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String sizeQueryString = "get 1 file in ('" + directory
 				+ "') having type = 'file' sort by size descending;";
-		Query sizeQuery = QueryFactory.newQuery(sizeQueryString);
-		List<Comparable> sizeResult = sizeQuery.execute();
+		Statement sizeQuery = JFSQL.parseOneStatement(sizeQueryString);
+		List<Comparable> sizeResult = sizeQuery.execute(new HashMap<String, Comparable>());
 		assertThat(sizeResult).hasSize(1).hasOnlyElementsOfType(File.class);
 
 		String string = "get file in ('" + directory
 				+ "') having type = 'file' and size between 0 and "
-				+ FilePropertyHelper.getSize((File) sizeResult.get(0)) + ";";
-		Query query = QueryFactory.newQuery(string);
+				+ FilePropertiesUtils.getSize((File) sizeResult.get(0)) + ";";
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -202,10 +201,10 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 	public void should_unvalidate_like() throws Exception {
 		// GIVEN
 		String string = "get file in ('" + directory + "') having size like 0;";
-		Query query = QueryFactory.newQuery(string);
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		// Exception mst be throw
@@ -216,10 +215,10 @@ public class HavingIntegerComparatorsTest extends AbstractHavingTest {
 		// GIVEN
 		String string = "get file in ('" + directory
 				+ "') having size match '.*';";
-		Query query = QueryFactory.newQuery(string);
+		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute();
+		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		// Exception mst be throw
