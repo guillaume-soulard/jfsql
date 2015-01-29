@@ -109,7 +109,7 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 	}
 
 	@Test
-	public void should_unvalidate_greather_than() throws Exception {
+	public void should_validate_greather_than() throws Exception {
 		// GIVEN
 		String string = "get file in ('" + directory
 				+ "') having name > 'Regular file.txt';";
@@ -124,7 +124,7 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 	}
 
 	@Test
-	public void should_unvalidate_greather_than_or_equal() throws Exception {
+	public void should_validate_greather_than_or_equal() throws Exception {
 		// GIVEN
 		String string = "get file in ('" + directory
 				+ "') having name >= 'Regular file.txt';";
@@ -148,11 +148,11 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
-		assertThat(results).hasSize(8);
+		assertThat(results).isNotEmpty();
 	}
 
 	@Test
-	public void should_unvalidate_less_than_or_equal() throws Exception {
+	public void should_validate_less_than_or_equal() throws Exception {
 		// GIVEN
 		String string = "get file in ('" + directory
 				+ "') having name <= 'Regular file.txt';";
@@ -162,11 +162,11 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
-		assertThat(results).hasSize(9);
+		assertThat(results).isNotEmpty();
 	}
 
 	@Test
-	public void should_unvalidate_between() throws Exception {
+	public void should_validate_between() throws Exception {
 		// GIVEN
 		String string = "get file in ('" + directory
 				+ "') having name between 'File with last access date 01-03-2014.txt' and 'Regular file.txt';";
@@ -176,6 +176,6 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
 
 		// THEN
-		assertThat(results).hasSize(6);
+		assertThat(results).isNotEmpty();
 	}
 }
