@@ -73,10 +73,10 @@ public class FilePropertiesUtils {
 		throw new Exception();
 	}
 
-	public static Long getSize(File file) throws Exception {
+	public static Double getSize(File file) throws Exception {
 		BasicFileAttributes attributes = getBasicFileAttributeView(file);
 		if (attributes != null) {
-			return attributes.size();
+			return (double) attributes.size();
 		}
 
 		throw new Exception();

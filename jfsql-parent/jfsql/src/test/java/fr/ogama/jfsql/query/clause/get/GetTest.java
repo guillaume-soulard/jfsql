@@ -187,10 +187,10 @@ public class GetTest {
 
 		// THEN
 		assertThat(results).isNotNull().isNotEmpty();
-		assertThat(results).hasOnlyElementsOfType(Long.class);
+		assertThat(results).hasOnlyElementsOfType(Double.class);
 
 		for (Comparable result : results) {
-			assertThat((Long) result).isNotNull().isGreaterThanOrEqualTo(0L);
+			assertThat((Double) result).isNotNull().isGreaterThanOrEqualTo(0L);
 		}
 	}
 

@@ -15,7 +15,7 @@ public class AsInteger extends AbstractFunction {
 	@Override
 	public List<Comparable> execute(Map<String, Comparable> params)
 			throws JFSQLExecutionException {
-		if (nbOperands() != 2) {
+		if (nbOperands() != 1) {
 			throw new IllegalArgumentException(
 					"AsInteger : Expected 1 arguments but found "
 							+ nbOperands());

@@ -37,17 +37,17 @@ public class Extract extends AbstractFunction {
 			throw new IllegalArgumentException(
 					"Extract second argument must be a String");
 		}
-
+		
 		String object = (String) firstArgumentResult.get(0);
 		String format = (String) secondArgumentResult.get(0);
-
+		
 		String result = "";
 		
 		Pattern pattern = Pattern.compile(format);
 		Matcher matcher = pattern.matcher(object);
 		if (matcher.find())
 		{
-		    result = matcher.group(1);
+		    result = matcher.group();
 		}
 				
 		return Arrays.asList((Comparable) result);

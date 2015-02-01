@@ -61,7 +61,7 @@ public interface JFSQLJJParserConstants {
   /** RegularExpression Id. */
   int K_ASINTEGER = 29;
   /** RegularExpression Id. */
-  int K_ASLONG = 30;
+  int K_ASDOUBLE = 30;
   /** RegularExpression Id. */
   int K_ASCONCAT = 31;
   /** RegularExpression Id. */
@@ -128,7 +128,7 @@ public interface JFSQLJJParserConstants {
     "\"ASDATESTRING\"",
     "\"ASDATE\"",
     "\"ASINTEGER\"",
-    "\"ASLONG\"",
+    "\"ASDOUBLE\"",
     "\"CONCAT\"",
     "\"EXTRACT\"",
     "\"ASSTRING\"",

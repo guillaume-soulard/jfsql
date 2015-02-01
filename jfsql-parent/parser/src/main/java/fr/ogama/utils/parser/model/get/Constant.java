@@ -62,7 +62,7 @@ public class Constant implements Expression {
 		Comparable formatedValue = null;
 		
 		if (type_ == NUMBER) {
-			formatedValue = Long.valueOf(value);
+			formatedValue = Double.valueOf(value);
 		} else {
 			formatedValue = value;
 		}
