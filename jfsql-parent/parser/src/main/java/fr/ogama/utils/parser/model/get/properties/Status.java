@@ -29,6 +29,11 @@ public class Status extends Constant {
 			status = FileStatus.WRITABLE;
 		}
 
+		// windows case
+		if (file.canRead() && !file.canWrite() && file.canExecute()) {
+			status = FileStatus.EXECUTABLE;
+		}
+		
 		if (file.canRead() && file.canWrite() && file.canExecute()) {
 			status = FileStatus.EXECUTABLE;
 		}
