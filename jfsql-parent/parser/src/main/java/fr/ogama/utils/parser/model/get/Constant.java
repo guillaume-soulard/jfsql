@@ -32,6 +32,7 @@ public class Constant implements Expression {
 	 */
 	public Constant(String v, int type) {
 		value = new String(v);
+		value = value.replace("''", "'");
 		type_ = type;
 	}
 

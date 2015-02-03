@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import fr.ogama.utils.parser.JFSQLExecutionException;
+import fr.ogama.utils.parser.model.Utils;
 
 public class AsString extends AbstractFunction {
 
@@ -15,7 +16,7 @@ public class AsString extends AbstractFunction {
 	@Override
 	public List<Comparable> execute(Map<String, Comparable> params)
 			throws JFSQLExecutionException {
-		if (nbOperands() != 2) {
+		if (nbOperands() != 1) {
 			throw new IllegalArgumentException(
 					"AsString : Expected 1 arguments but found "
 							+ nbOperands());
@@ -26,7 +27,7 @@ public class AsString extends AbstractFunction {
 		Comparable object = firstArgumentResult.get(0);
 		try {
 			return Arrays
-					.asList((Comparable) object.toString());
+					.asList((Comparable) Utils.toString(object));
 		} catch (Exception e) {
 			throw new JFSQLExecutionException(e.getMessage(), e);
 		}

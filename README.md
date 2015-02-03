@@ -21,7 +21,7 @@ Be careful, this command don't run any tests. To do that you have to run a 'clea
 ##Usage
 Sample usage in a Java application :
 ```java
-Query query = Queryfactory.newQuery("get file or directory in('/home/Bob')");
+Query query = Queryfactory.newQuery("get file in('/home/Bob')");
 List<Comparable> results = query.execute();
 ```
 
@@ -117,12 +117,12 @@ You can filter on followings properties :
 * owner : the owner of the file or the directory
 * path : the path
 * parent : the parent name
-* size : the size in bytes
+* size : the size in bytes (directory size is not the size of directory's content but the size of the directory without any content)
 * content : the content (only on files)
 * last_update_date : the last modification date (yyyy/mm/dd hh/mm/ss)
 * last_access_date : the last access date (yyyy/mm/dd hh/mm/ss)
 * creation_date : the creation date (yyyy/mm/dd hh/mm/ss)
-* status : 'readable', 'writable', 'executable'
+* status : 'unaccessible', 'readable', 'writable', 'executable'
 * type : 'file' or 'directory'
 
 Supported comparators :
@@ -186,15 +186,15 @@ You can sort on followings properties :
 * owner : the owner of the file or the directory
 * path : the path
 * parent : the parent name
-* size : the size in bytes
+* size : the size in bytes (directory size is not the size of directory's content but the size of the directory without any content)
 * content : the content (only on files)
 * last_update_date : the last modification date (yyyy/mm/dd hh/mm/ss)
 * last_access_date : the last access date (yyyy/mm/dd hh/mm/ss)
 * creation_date : the creation date (yyyy/mm/dd hh/mm/ss)
-* status : 'readable', 'writable', 'executable'
+* status : 'unaccessible', 'readable', 'writable', 'executable'
 * type : 'file', 'directory'
 
-###Functions (work in progress)
+###Functions
 ####Aggregations Functions
 
 Aggregations functions is only supported in get clause : 
@@ -204,14 +204,30 @@ Aggregations functions is only supported in get clause :
 * avg (attribute) : works only on numbers
 * sum (attribute) : works only on numbers
 
+```
+// Standalone usage
+count(1, 2, 3, 4);
+// Output -> 4
+
+// Query usage
+count(get file in('/'));
+```
+
 ####Functions
 
 Those functions can be use in get or having clauses : 
 * asDate (value) : parse the specified value and return a date
-* asInteger (value) : cast the specified value as an integer
-* asDecimal (value, separator) : cast the specified value as a decimal number with the specified separator
-* asString (value)
-* asDateString(value, formatPattern)
-* concat(string, string)
-* extract (value, regexp)
+* asInteger (value) : convert the specified value as an java Integer type
+* asDouble (value) : convert the specified value as a java Double type
+* asString (value) : convert the value as string
+* asDateString(value, formatPattern) : format the specified date with the specified format as string. You have to use Java date formatting (see this [link](http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html))
+* concat(string, string[, string]*) : concat as many strings as you want
+* extract (string, regexp) : return the first substring matches in the specified regular expression
+
+```
+concat('Ogama''s home size : ', sum(get size in('/home/ogama' deep 1)), ' bytes');
+
+// Output -> Ogama's home size : 286306.0 bytes
+// Note you can escape the quote by writing double quote
+```
 

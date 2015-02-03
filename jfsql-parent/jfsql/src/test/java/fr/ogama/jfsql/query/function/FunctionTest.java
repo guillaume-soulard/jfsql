@@ -21,9 +21,8 @@ public class FunctionTest {
 	public void should_test_count_function_standalone()
 			throws JFSQLExecutionException {
 		// GIVEN
-		Statement query = JFSQL
-				.parseOneStatement("count(1, 2, 3, 4);");
-		
+		Statement query = JFSQL.parseOneStatement("count(1, 2, 3, 4);");
+
 		// WHEN
 		List<Comparable> results = query
 				.execute(new HashMap<String, Comparable>());
@@ -34,14 +33,13 @@ public class FunctionTest {
 		Integer countResult = (Integer) results.get(0);
 		assertThat(countResult).isEqualTo(4);
 	}
-	
+
 	@Test
 	public void should_test_sum_function_standalone()
 			throws JFSQLExecutionException {
 		// GIVEN
-		Statement query = JFSQL
-				.parseOneStatement("sum(1, 2, 3.9, 4.4);");
-		
+		Statement query = JFSQL.parseOneStatement("sum(1, 2, 3.9, 4.4);");
+
 		// WHEN
 		List<Comparable> results = query
 				.execute(new HashMap<String, Comparable>());
@@ -52,14 +50,13 @@ public class FunctionTest {
 		Double sumResult = (Double) results.get(0);
 		assertThat(sumResult).isEqualTo(11.3d);
 	}
-	
+
 	@Test
 	public void should_test_max_function_standalone()
 			throws JFSQLExecutionException {
 		// GIVEN
-		Statement query = JFSQL
-				.parseOneStatement("max(1, 2, 3.9, 4.4);");
-		
+		Statement query = JFSQL.parseOneStatement("max(1, 2, 3.9, 4.4);");
+
 		// WHEN
 		List<Comparable> results = query
 				.execute(new HashMap<String, Comparable>());
@@ -70,14 +67,13 @@ public class FunctionTest {
 		Double maxResult = (Double) results.get(0);
 		assertThat(maxResult).isEqualTo(4.4d);
 	}
-	
+
 	@Test
 	public void should_test_min_function_standalone()
 			throws JFSQLExecutionException {
 		// GIVEN
-		Statement query = JFSQL
-				.parseOneStatement("min(1, 2, 3.9, 4.4);");
-		
+		Statement query = JFSQL.parseOneStatement("min(1, 2, 3.9, 4.4);");
+
 		// WHEN
 		List<Comparable> results = query
 				.execute(new HashMap<String, Comparable>());
@@ -88,14 +84,13 @@ public class FunctionTest {
 		Double minResult = (Double) results.get(0);
 		assertThat(minResult).isEqualTo(1d);
 	}
-	
+
 	@Test
 	public void should_test_avg_function_standalone()
 			throws JFSQLExecutionException {
 		// GIVEN
-		Statement query = JFSQL
-				.parseOneStatement("avg(1, 2, 3.9, 4.4);");
-		
+		Statement query = JFSQL.parseOneStatement("avg(1, 2, 3.9, 4.4);");
+
 		// WHEN
 		List<Comparable> results = query
 				.execute(new HashMap<String, Comparable>());
@@ -106,7 +101,7 @@ public class FunctionTest {
 		Double avgResult = (Double) results.get(0);
 		assertThat(avgResult).isEqualTo(2.825d);
 	}
-	
+
 	@Test
 	public void should_test_count_function_in_get()
 			throws JFSQLExecutionException {
@@ -114,7 +109,7 @@ public class FunctionTest {
 		Statement query = JFSQL
 				.parseOneStatement("count(get file in ('/' deep 1));");
 		int count = new File("/").listFiles().length;
-		
+
 		// WHEN
 		List<Comparable> results = query
 				.execute(new HashMap<String, Comparable>());
@@ -125,9 +120,10 @@ public class FunctionTest {
 		Integer countResult = (Integer) results.get(0);
 		assertThat(countResult).isEqualTo(count);
 	}
-	
+
 	@Test
-	public void should_test_asDate_function_in_get() throws JFSQLExecutionException {
+	public void should_test_asDate_function_in_get()
+			throws JFSQLExecutionException {
 		// GIVEN
 		Statement query = JFSQL
 				.parseOneStatement("get 1 asDate('2015/01/01', 'yyyy/MM/dd') in ('.' deep 1);");
@@ -169,7 +165,8 @@ public class FunctionTest {
 	}
 
 	@Test
-	public void should_test_concat_function_in_get() throws JFSQLExecutionException {
+	public void should_test_concat_function_in_get()
+			throws JFSQLExecutionException {
 		// GIVEN
 		Statement query = JFSQL
 				.parseOneStatement("get 1 concat('String 1', 'String 2', 'String 3', 'String 3') in ('.' deep 1);");
@@ -186,7 +183,8 @@ public class FunctionTest {
 	}
 
 	@Test
-	public void should_test_extract_function_in_get() throws JFSQLExecutionException {
+	public void should_test_extract_function_in_get()
+			throws JFSQLExecutionException {
 		// GIVEN
 		Statement query = JFSQL
 				.parseOneStatement("get 1 extract('the date 2015/02/03 should be extract', '[0-9]{4}\\/[0-9]{2}\\/[0-9]{2}') in ('.' deep 1);");
@@ -201,16 +199,17 @@ public class FunctionTest {
 		String date = (String) results.get(0);
 		assertThat(date).isEqualTo("2015/02/03");
 	}
-	
+
 	@Test
-	public void should_test_asInteger_function_in_get() throws JFSQLExecutionException {
+	public void should_test_asInteger_function_in_get()
+			throws JFSQLExecutionException {
 		// GIVEN
 		Statement query_1 = JFSQL
 				.parseOneStatement("get 1 asInteger('1') in ('.' deep 1);");
 
 		Statement query_minus_1 = JFSQL
 				.parseOneStatement("get 1 asInteger('-1') in ('.' deep 1);");
-		
+
 		// WHEN
 		List<Comparable> results_1 = query_1
 				.execute(new HashMap<String, Comparable>());
@@ -222,22 +221,23 @@ public class FunctionTest {
 		assertThat(results_1.get(0)).isExactlyInstanceOf(Integer.class);
 		Integer integer_1 = (Integer) results_1.get(0);
 		assertThat(integer_1).isEqualTo(1);
-		
+
 		assertThat(results_minus_1).hasSize(1);
 		assertThat(results_minus_1.get(0)).isExactlyInstanceOf(Integer.class);
 		Integer integer_minus_1 = (Integer) results_minus_1.get(0);
 		assertThat(integer_minus_1).isEqualTo(-1);
 	}
-	
+
 	@Test
-	public void should_test_asLong_function_in_get() throws JFSQLExecutionException {
+	public void should_test_asLong_function_in_get()
+			throws JFSQLExecutionException {
 		// GIVEN
 		Statement query_1 = JFSQL
 				.parseOneStatement("get 1 asDouble('10.265') in ('.' deep 1);");
 
 		Statement query_minus_1 = JFSQL
 				.parseOneStatement("get 1 asDouble('-16546.685') in ('.' deep 1);");
-		
+
 		// WHEN
 		List<Comparable> results_1 = query_1
 				.execute(new HashMap<String, Comparable>());
@@ -249,23 +249,23 @@ public class FunctionTest {
 		assertThat(results_1.get(0)).isExactlyInstanceOf(Double.class);
 		Double integer_1 = (Double) results_1.get(0);
 		assertThat(integer_1).isEqualTo(10.265);
-		
+
 		assertThat(results_minus_1).hasSize(1);
 		assertThat(results_minus_1.get(0)).isExactlyInstanceOf(Double.class);
 		Double integer_minus_1 = (Double) results_minus_1.get(0);
 		assertThat(integer_minus_1).isEqualTo(-16546.685);
 	}
-	
+
 	@Test
-	@Ignore
-	public void should_test_asString_function_in_get() throws JFSQLExecutionException {
+	public void should_test_asString_function_in_get()
+			throws JFSQLExecutionException {
 		// GIVEN
 		Statement query_1 = JFSQL
-				.parseOneStatement("get 1 asInteger(1) in ('.' deep 1);");
+				.parseOneStatement("get 1 asString(1) in ('.' deep 1);");
 
 		Statement query_minus_1 = JFSQL
-				.parseOneStatement("get 1 asInteger(-1) in ('.' deep 1);");
-		
+				.parseOneStatement("get 1 asString(-1) in ('.' deep 1);");
+
 		// WHEN
 		List<Comparable> results_1 = query_1
 				.execute(new HashMap<String, Comparable>());
@@ -275,12 +275,42 @@ public class FunctionTest {
 		// THEN
 		assertThat(results_1).hasSize(1);
 		assertThat(results_1.get(0)).isExactlyInstanceOf(String.class);
-		Integer integer_1 = (Integer) results_1.get(0);
-		assertThat(integer_1).isEqualTo(1);
-		
+		String string_1 = (String) results_1.get(0);
+		assertThat(string_1).isEqualTo("1");
+
 		assertThat(results_minus_1).hasSize(1);
 		assertThat(results_minus_1.get(0)).isExactlyInstanceOf(String.class);
-		Integer integer_minus_1 = (Integer) results_minus_1.get(0);
-		assertThat(integer_minus_1).isEqualTo(-1);
+		String string_minus_1 = (String) results_minus_1.get(0);
+		assertThat(string_minus_1).isEqualTo("-1");
+	}
+
+	@Test
+	public void should_concat_strings_with_specials_caracters()
+			throws JFSQLExecutionException {
+		// GIVEN
+		Statement query = JFSQL
+				.parseOneStatement("concat('Ogama''s', ' home');");
+
+		// WHEN
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
+
+		// THEN
+		assertThat(results).hasSize(1);
+		assertThat(results.get(0)).isEqualTo("Ogama's home");
+	}
+
+	@Test
+	public void should_concat_strings_format() throws JFSQLExecutionException {
+		// GIVEN
+		Statement query = JFSQL
+				.parseOneStatement("concat('Size : ', sum(get size in('/'deep 2)));");
+
+		// WHEN
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
+
+		// THEN
+		assertThat(results).hasSize(1);
 	}
 }

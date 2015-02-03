@@ -74,12 +74,7 @@ public class FilePropertiesUtils {
 	}
 
 	public static Double getSize(File file) throws Exception {
-		BasicFileAttributes attributes = getBasicFileAttributeView(file);
-		if (attributes != null) {
-			return (double) attributes.size();
-		}
-
-		throw new Exception();
+		return (double) file.length();
 	}
 
 	public static Date parseDateFromCurrentLocal(String date)

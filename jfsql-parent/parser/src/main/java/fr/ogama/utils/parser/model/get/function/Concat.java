@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import fr.ogama.utils.parser.JFSQLExecutionException;
+import fr.ogama.utils.parser.model.Utils;
 import fr.ogama.utils.parser.model.get.Expression;
 
 public class Concat extends AbstractFunction {
@@ -29,7 +30,7 @@ public class Concat extends AbstractFunction {
 				List<Comparable> results = param.execute(params);
 
 				if (results.size() == 1) {
-					concat.append(results.get(0).toString());
+					concat.append(Utils.toString(results.get(0)));
 				} else {
 					throw new JFSQLExecutionException(
 							"Too many result for parameter "

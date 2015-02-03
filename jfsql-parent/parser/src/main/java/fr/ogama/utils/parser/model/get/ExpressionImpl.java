@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import fr.ogama.utils.parser.JFSQLExecutionException;
+import fr.ogama.utils.parser.model.Utils;
 
 public class ExpressionImpl implements Expression {
 
@@ -15,7 +16,6 @@ public class ExpressionImpl implements Expression {
 		this.operator = new String(operator);
 	}
 
-	
 	public ExpressionImpl(String op, Expression o1) {
 		operator = new String(op);
 		addOperand(o1);
@@ -91,8 +91,34 @@ public class ExpressionImpl implements Expression {
 		return operands.size();
 	}
 
+	public List<Comparable> execute(Map<String, Comparable> params)
+			throws JFSQLExecutionException {
 
-	public List<Comparable> execute(Map<String, Comparable> params) throws JFSQLExecutionException {
+		// minus case (will be externalize futher)
+		if ("-".equals(operator) && getOperands().size() == 1) {
+			List<Comparable> results = getOperand(0).execute(params);
+			for (Comparable result : results) {
+				try {
+					results.set(results.indexOf(result),
+							-Integer.valueOf(Utils.toString(result)));
+				} catch (Exception e1) {
+					try {
+						results.set(results.indexOf(result),
+								-Double.valueOf(Utils.toString(result)));
+					} catch (Exception e2) {
+						try {
+							results.set(results.indexOf(result),
+									-Long.valueOf(Utils.toString(result)));
+						} catch (Exception e3) {
+							throw new RuntimeException("Unimplemented");
+						}
+					}
+				}
+			}
+
+			return results;
+		}
+
 		throw new RuntimeException("Unimplemented");
 	}
 }

@@ -1,5 +1,6 @@
 package fr.ogama.utils.parser.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -58,8 +59,19 @@ public class Utils {
 			return null;
 	}
 	
-	public static Number add(Number n1, Number n2) throws IllegalArgumentException {
+	public static String toString(Comparable object) {
+		if (object instanceof Integer) {
+			return new BigDecimal((Integer)object).toPlainString();
+		}
 		
+		if (object instanceof Double) {
+			return new BigDecimal((Double)object).toPlainString();
+		}
+		
+		return object.toString();
+	}
+	
+	public static Number add(Number n1, Number n2) throws IllegalArgumentException {
 		return n1.doubleValue() + n2.doubleValue();
 	}
 	
