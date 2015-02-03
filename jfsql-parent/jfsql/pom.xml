@@ -55,21 +55,7 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- <dependency> -->
-		<!-- <groupId>doesntMatter</groupId> -->
-		<!-- <artifactId>doesntMatter</artifactId> -->
-		<!-- <version>doesntMatter</version> -->
-		<!-- <scope>system</scope> -->
-		<!-- <systemPath>${basedir}/libs/zql.jar</systemPath> -->
-		<!-- </dependency> -->
 	</dependencies>
-
-<!-- 	<repositories> -->
-<!-- 		<repository> -->
-<!-- 			<id>localRepository</id> -->
-<!-- 			<url>${baseDir}/localRepository</url> -->
-<!-- 		</repository> -->
-<!-- 	</repositories> -->
 
 	<build>
 		<plugins>
@@ -84,6 +70,8 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<finalName>jfsql-${jfsqlVersion}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
 		</plugins>

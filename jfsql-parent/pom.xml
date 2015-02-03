@@ -9,6 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jfsqlVersion>1.0</jfsqlVersion>
 	</properties>
 
 	<modules>
