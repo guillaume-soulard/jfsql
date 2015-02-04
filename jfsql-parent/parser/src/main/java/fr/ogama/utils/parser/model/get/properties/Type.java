@@ -1,6 +1,6 @@
 package fr.ogama.utils.parser.model.get.properties;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +20,20 @@ public class Type extends Constant {
 			throws JFSQLExecutionException {
 		java.io.File file = (java.io.File) params.get("file");
 
-		return Arrays.asList((Comparable) (file.isFile() ? FileType.FILE.getLabel()
-				: FileType.DIRECTORY.getLabel()));
+		List<Comparable> types = new ArrayList<Comparable>();
+		
+		if (file.isFile()) {
+			types.add(FileType.FILE.getLabel());
+		}
+		
+		if (file.isDirectory()) {
+			types.add(FileType.DIRECTORY.getLabel());
+		}
+		
+		if (file.isHidden()) {
+			types.add(FileType.HIDDEN.getLabel());
+		}
+		
+		return types;
 	}
 }

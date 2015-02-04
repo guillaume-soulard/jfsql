@@ -3,7 +3,8 @@ package fr.ogama.utils.parser.model.get;
 public enum FileType {
 	
 	FILE("file"),
-	DIRECTORY("directory");
+	DIRECTORY("directory"),
+	HIDDEN("hidden");
 	
 	private String label;
 	
@@ -13,5 +14,10 @@ public enum FileType {
 	
 	public String getLabel() {
 		return label;
+	}
+	
+	@Override
+	public String toString() {
+		return getLabel();
 	}
 }

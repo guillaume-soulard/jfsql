@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import fr.ogama.jfsql.JFSQL;
 import fr.ogama.jfsql.query.clause.having.AbstractHavingTest;
+import fr.ogama.utils.parser.JFSQLExecutionException;
 import fr.ogama.utils.parser.model.Statement;
 
 public class HavingStringComparatorsTest extends AbstractHavingTest {
@@ -21,7 +22,7 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		setUp();
 	}
 
-	@AfterClass 
+	@AfterClass
 	public static void tearDownAfterClass() {
 		tearDown();
 	}
@@ -34,7 +35,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -50,7 +52,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -67,7 +70,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -83,7 +87,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -100,7 +105,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasOnlyElementsOfType(File.class);
@@ -116,7 +122,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasSize(0);
@@ -131,7 +138,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).hasSize(1);
@@ -145,7 +153,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty();
@@ -159,7 +168,8 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty();
@@ -168,14 +178,37 @@ public class HavingStringComparatorsTest extends AbstractHavingTest {
 	@Test
 	public void should_validate_between() throws Exception {
 		// GIVEN
-		String string = "get file in ('" + directory
+		String string = "get file in ('"
+				+ directory
 				+ "') having name between 'File with last access date 01-03-2014.txt' and 'Regular file.txt';";
 		Statement query = JFSQL.parseOneStatement(string);
 
 		// WHEN
-		List<Comparable> results = query.execute(new HashMap<String, Comparable>());
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
 
 		// THEN
 		assertThat(results).isNotEmpty();
+	}
+
+	@Test
+	public void should_validate_is() throws JFSQLExecutionException {
+		// GIVEN
+		String string = "get file in ('"
+				+ directory
+				+ "') having status is 'writable' and status is not 'executable';";
+		Statement query = JFSQL.parseOneStatement(string);
+
+		// WHEN
+		List<Comparable> results = query
+				.execute(new HashMap<String, Comparable>());
+
+		// THEN
+		assertThat(results).isNotEmpty();
+		for (Comparable file : results) {
+			assertThat(file).isExactlyInstanceOf(File.class);
+			assertThat((File) file).canWrite();
+			assertThat(((File) file).canExecute()).isFalse();
+		}
 	}
 }

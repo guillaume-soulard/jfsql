@@ -11,6 +11,8 @@ import fr.ogama.utils.parser.model.get.ExpressionImpl;
 import fr.ogama.utils.parser.model.get.GetStatement;
 import fr.ogama.utils.parser.model.get.PathItem;
 import fr.ogama.utils.parser.model.get.expressions.comparator.Equal;
+import fr.ogama.utils.parser.model.get.expressions.comparator.Is;
+import fr.ogama.utils.parser.model.get.expressions.logical.NotExpression;
 import fr.ogama.utils.parser.model.get.function.AsDate;
 import fr.ogama.utils.parser.model.get.function.AsDateString;
 import fr.ogama.utils.parser.model.get.function.Sum;
@@ -203,8 +205,7 @@ public class TestParser {
 
 		// THEN
 		assertThat(sumStatements).hasSize(1);
-		assertThat(sumStatements.get(0)).isExactlyInstanceOf(
-				Sum.class);
+		assertThat(sumStatements.get(0)).isExactlyInstanceOf(Sum.class);
 		Sum expression = (Sum) sumStatements.get(0);
 		assertThat(expression.getOperands()).hasSize(1);
 		assertThat(expression.getOperand(0)).isExactlyInstanceOf(
@@ -239,15 +240,41 @@ public class TestParser {
 		assertThat(statements).hasSize(1);
 		assertThat(statements.get(0)).isExactlyInstanceOf(GetStatement.class);
 		GetStatement statement = (GetStatement) statements.get(0);
-		assertThat(statement.getHavingClause().getExpression()).isExactlyInstanceOf(Equal.class);
-		assertThat(((ExpressionImpl)statement.getHavingClause().getExpression()).getOperands()).hasSize(2);
-		assertThat(((ExpressionImpl)statement.getHavingClause().getExpression()).getOperand(0)).isExactlyInstanceOf(AsDate.class);
-		ExpressionImpl expression = (ExpressionImpl) ((ExpressionImpl)statement.getHavingClause().getExpression()).getOperand(0);
+		assertThat(statement.getHavingClause().getExpression())
+				.isExactlyInstanceOf(Equal.class);
+		assertThat(
+				((ExpressionImpl) statement.getHavingClause().getExpression())
+						.getOperands()).hasSize(2);
+		assertThat(
+				((ExpressionImpl) statement.getHavingClause().getExpression())
+						.getOperand(0)).isExactlyInstanceOf(AsDate.class);
+		ExpressionImpl expression = (ExpressionImpl) ((ExpressionImpl) statement
+				.getHavingClause().getExpression()).getOperand(0);
 		assertThat(expression.getOperator()).isEqualTo("asDate");
 		assertThat(expression.getOperands()).hasSize(2);
-		assertThat(expression.getOperand(0)).isExactlyInstanceOf(AsDateString.class);
+		assertThat(expression.getOperand(0)).isExactlyInstanceOf(
+				AsDateString.class);
 		ExpressionImpl subFunction = (ExpressionImpl) expression.getOperand(0);
 		assertThat(subFunction.getOperator()).isEqualTo("asDateString");
 		assertThat(subFunction.getOperands()).hasSize(2);
+	}
+
+	@Test
+	public void should_parse_is() throws ParseException {
+		// GIVEN
+		JFSQLParser jfsqlParser = new JFSQLParser();
+
+		// WHEN
+		Vector<Statement> statements = jfsqlParser
+				.parse("get name in ('.') having status is not 'readable';");
+
+		// THEN
+		assertThat(statements).hasSize(1);
+		assertThat(statements.get(0)).isExactlyInstanceOf(GetStatement.class);
+		GetStatement getStatement = (GetStatement) statements.get(0);
+		assertThat(getStatement.getHavingClause().getExpression()).isExactlyInstanceOf(NotExpression.class);
+		NotExpression notExpression = (NotExpression) getStatement.getHavingClause().getExpression();
+		assertThat(notExpression.getOperands()).hasSize(1);
+		assertThat(notExpression.getOperand(0)).isExactlyInstanceOf(Is.class);
 	}
 }

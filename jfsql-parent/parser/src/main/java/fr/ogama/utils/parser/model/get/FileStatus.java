@@ -1,25 +1,23 @@
 package fr.ogama.utils.parser.model.get;
 
 public enum FileStatus {
-	UNACCISSIBLE("unaccessible",0),
-	READABLE("readable", 1),
-	WRITABLE("writable", 2),
-	EXECUTABLE("executable", 3);
+	UNACCISSIBLE("unaccessible"),
+	READABLE("readable"),
+	WRITABLE("writable"),
+	EXECUTABLE("executable");
 	
 	private String label;
-	
-	private int index;
 
-	private FileStatus(String label, int index) {
+	private FileStatus(String label) {
 		this.label = label;
-		this.index = index;
-	}
-	
-	public int getIndex() {
-		return index;
 	}
 	
 	public String getLabel() {
 		return label;
+	}
+	
+	@Override
+	public String toString() {
+		return getLabel();
 	}
 }

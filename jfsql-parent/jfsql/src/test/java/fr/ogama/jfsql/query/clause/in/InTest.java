@@ -169,7 +169,7 @@ public class InTest {
 	
 	@Test
 	public void should_get_file_in_in_sub_query() throws Exception {
-		String directoryQueryString = "get 2 file in ('.' deep 1) having type = 'directory'";
+		String directoryQueryString = "get 2 file in ('.' deep 1) having type is 'directory'";
 		Statement directoryQuery = JFSQL.parseOneStatement(directoryQueryString + ";");
 		
 		String query = "get file in (" + directoryQueryString + " deep 1);";

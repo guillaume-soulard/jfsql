@@ -1,5 +1,6 @@
 package fr.ogama.utils.parser.model.get.properties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -19,26 +20,25 @@ public class Status extends Constant {
 	public List<Comparable> execute(Map<String, Comparable> params)
 			throws JFSQLExecutionException {
 		java.io.File file = (java.io.File) params.get("file");
-		FileStatus status = FileStatus.UNACCISSIBLE;
-
-		if (file.canRead() && !file.canWrite() && !file.canExecute()) {
-			status = FileStatus.READABLE;
+		
+		List<Comparable> status = new ArrayList<Comparable>();
+				
+		if (file.canRead()) {
+			status.add(FileStatus.READABLE.getLabel());
 		}
 
-		if (file.canRead() && file.canWrite() && !file.canExecute()) {
-			status = FileStatus.WRITABLE;
+		if (file.canWrite()) {
+			status.add(FileStatus.WRITABLE.getLabel());
 		}
 
-		// windows case
-		if (file.canRead() && !file.canWrite() && file.canExecute()) {
-			status = FileStatus.EXECUTABLE;
+		if (file.canExecute()) {
+			status.add(FileStatus.EXECUTABLE.getLabel());
 		}
 		
-		if (file.canRead() && file.canWrite() && file.canExecute()) {
-			status = FileStatus.EXECUTABLE;
+		if (!file.canRead() && !file.canWrite() && !file.canExecute()) {
+			status.add(FileStatus.UNACCISSIBLE.getLabel());
 		}
 
-		return Arrays
-				.asList((Comparable) status.getLabel());
+		return status;
 	}
 }

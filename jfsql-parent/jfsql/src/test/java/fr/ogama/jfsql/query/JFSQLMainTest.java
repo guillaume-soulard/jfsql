@@ -47,7 +47,7 @@ public class JFSQLMainTest {
 	public void should_get_well_formated_results()
 			throws JFSQLExecutionException {
 		// GIVEN
-		String query = "concat('Size : ', sum(get size in('/' deep 4) having status > 'unaccessible'));";
+		String query = "concat('Size : ', sum(get size in('/' deep 4) having status is not 'unaccessible'));";
 
 		// WHEN
 		JFSQL.main(new String[] { query });

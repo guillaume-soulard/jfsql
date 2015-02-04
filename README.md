@@ -48,7 +48,7 @@ Select the file attribute to return as a result of the query.
 * last_update_date : get the last modification date (yyyy/mm/dd hh/mm/ss)
 * last_access_date : get the last access date (yyyy/mm/dd hh/mm/ss)
 * creation_date : get the creation date (yyyy/mm/dd hh/mm/ss)
-* status : 'readable', 'writable', 'executable'
+* status : 'unaccessible', 'readable', 'writable', 'executable'
 * type : 'file' or 'directory' 
 
 
@@ -123,7 +123,9 @@ You can filter on followings properties :
 * last_access_date : the last access date (yyyy/mm/dd hh/mm/ss)
 * creation_date : the creation date (yyyy/mm/dd hh/mm/ss)
 * status : 'unaccessible', 'readable', 'writable', 'executable'
-* type : 'file' or 'directory'
+* type : 'file' or 'directory', hidden
+
+Note : for type ans status property, is operator is safer than others
 
 Supported comparators :
 * =
@@ -191,8 +193,8 @@ You can sort on followings properties :
 * last_update_date : the last modification date (yyyy/mm/dd hh/mm/ss)
 * last_access_date : the last access date (yyyy/mm/dd hh/mm/ss)
 * creation_date : the creation date (yyyy/mm/dd hh/mm/ss)
-* status : 'unaccessible', 'readable', 'writable', 'executable'
-* type : 'file', 'directory'
+
+Sort not working well for status as type property 
 
 ###Functions
 ####Aggregations Functions

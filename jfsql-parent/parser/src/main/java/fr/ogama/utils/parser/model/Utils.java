@@ -2,7 +2,6 @@ package fr.ogama.utils.parser.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 public class Utils {
@@ -69,6 +68,17 @@ public class Utils {
 		}
 		
 		return object.toString();
+	}
+	
+	public static String toString(List<Comparable> list) {
+		StringBuilder string = new StringBuilder();
+		boolean firstLoop = true;
+		
+		for (Comparable item : list) {			
+			string.append(Utils.toString(item));
+		}
+		
+		return string.toString();
 	}
 	
 	public static Number add(Number n1, Number n2) throws IllegalArgumentException {

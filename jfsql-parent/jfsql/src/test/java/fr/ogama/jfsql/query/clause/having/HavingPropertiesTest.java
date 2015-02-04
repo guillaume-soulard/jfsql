@@ -249,7 +249,7 @@ public class HavingPropertiesTest extends AbstractHavingTest {
 	public void should_get_names_by_status() throws Exception {
 		// GIVEN
 		String query = "get name in ('" + directory
-				+ "') having status = 'executable' and type = 'file';";
+				+ "') having status is 'executable' and type is 'file';";
 		Statement fileQuery = JFSQL.parseOneStatement(query);
 
 		// WHEN

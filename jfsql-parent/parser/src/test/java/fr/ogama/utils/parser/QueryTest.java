@@ -19,7 +19,7 @@ public class QueryTest {
 		// GIVEN
 		JFSQLParser jfsqlParser = new JFSQLParser();
 		Vector<Statement> statements = jfsqlParser
-				.parse("get name in ('/' deep 1) having type = 'directory' sort by name ascending;");
+				.parse("get name in ('/' deep 1) having type is 'directory' sort by name ascending;");
 		GetStatement statement = (GetStatement) statements.get(0);
 
 		// WHEN
@@ -35,7 +35,7 @@ public class QueryTest {
 		// GIVEN
 		JFSQLParser jfsqlParser = new JFSQLParser();
 		Vector<Statement> statements = jfsqlParser
-				.parse("get asDateString(creation_date, 'yyyy') in ('/' deep 1) having type = 'directory' sort by name ascending;");
+				.parse("get asDateString(creation_date, 'yyyy') in ('/' deep 1) having type is 'directory' sort by name ascending;");
 		GetStatement statement = (GetStatement) statements.get(0);
 
 		// WHEN
@@ -56,7 +56,7 @@ public class QueryTest {
 		// GIVEN
 		JFSQLParser jfsqlParser = new JFSQLParser();
 		Vector<Statement> statements = jfsqlParser
-				.parse("count(get file in ('/' deep 1) having type = 'directory' sort by name ascending);");
+				.parse("count(get file in ('/' deep 1) having type is 'directory' sort by name ascending);");
 		Statement statement = statements.get(0);
 
 		File[] directoriesOnRoot = new File("/").listFiles(new FileFilter() {

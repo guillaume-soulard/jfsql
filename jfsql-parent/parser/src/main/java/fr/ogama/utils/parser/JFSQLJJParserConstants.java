@@ -69,29 +69,31 @@ public interface JFSQLJJParserConstants {
   /** RegularExpression Id. */
   int K_ASSTRING = 33;
   /** RegularExpression Id. */
-  int S_NUMBER = 34;
+  int K_IS = 34;
   /** RegularExpression Id. */
-  int FLOAT = 35;
+  int S_NUMBER = 35;
   /** RegularExpression Id. */
-  int INTEGER = 36;
+  int FLOAT = 36;
   /** RegularExpression Id. */
-  int DIGIT = 37;
+  int INTEGER = 37;
   /** RegularExpression Id. */
-  int LINE_COMMENT = 38;
+  int DIGIT = 38;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 39;
+  int LINE_COMMENT = 39;
   /** RegularExpression Id. */
-  int S_IDENTIFIER = 40;
+  int MULTI_LINE_COMMENT = 40;
   /** RegularExpression Id. */
-  int LETTER = 41;
+  int S_IDENTIFIER = 41;
   /** RegularExpression Id. */
-  int SPECIAL_CHARS = 42;
+  int LETTER = 42;
   /** RegularExpression Id. */
-  int S_BIND = 43;
+  int SPECIAL_CHARS = 43;
   /** RegularExpression Id. */
-  int S_CHAR_LITERAL = 44;
+  int S_BIND = 44;
   /** RegularExpression Id. */
-  int S_QUOTED_IDENTIFIER = 45;
+  int S_CHAR_LITERAL = 45;
+  /** RegularExpression Id. */
+  int S_QUOTED_IDENTIFIER = 46;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -132,6 +134,7 @@ public interface JFSQLJJParserConstants {
     "\"CONCAT\"",
     "\"EXTRACT\"",
     "\"ASSTRING\"",
+    "\"IS\"",
     "<S_NUMBER>",
     "<FLOAT>",
     "<INTEGER>",

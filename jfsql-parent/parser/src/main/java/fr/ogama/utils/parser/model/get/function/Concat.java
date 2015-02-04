@@ -32,9 +32,7 @@ public class Concat extends AbstractFunction {
 				if (results.size() == 1) {
 					concat.append(Utils.toString(results.get(0)));
 				} else {
-					throw new JFSQLExecutionException(
-							"Too many result for parameter "
-									+ getOperands().indexOf(param) + 1);
+					concat.append(Utils.toString(results));
 				}
 			}
 		}
