@@ -104,7 +104,7 @@ public class SortTest {
 	@Test
 	public void should_sort_by_status() throws JFSQLExecutionException {
 		// GIVEN
-		String ascendingQuery = "get concat(name, ' ', status) in('/home/ogama' deep 2) sort by status ascending;";
+		String ascendingQuery = "get concat(name, ' ', status) in('.' deep 2) sort by status ascending;";
 		Statement ascendingFileQuery = JFSQL.parseOneStatement(ascendingQuery);
 
 		// WHEN
