@@ -1,4 +1,4 @@
-#JFSQL  ![Build Status](https://travis-ci.org/ogama/jfsql.svg)
+# JFSQL  ![Build Status](https://travis-ci.org/ogama/jfsql.svg)
 
 JFSQL (Java File System Query Language) is a Java library for querying the file system. This library provide a query language to allow external uses for exemple as shell command.
 
@@ -6,10 +6,10 @@ JFSQL (Java File System Query Language) is a Java library for querying the file 
 java -jar jfsql.jar "<query>"
 ```
 
-##Maven
-###Project dependency
+## Maven
+### Project dependency
 Work in progress
-###Build jar
+### Build jar
 
 Run the following command to build a standalone jar library
 
@@ -18,14 +18,14 @@ mvn clean compile assembly:single
 ```
 Be careful, this command don't run any tests. To do that you have to run a 'clean install' or 'clean verify'
 
-##Usage
+## Usage
 Sample usage in a Java application :
 ```java
 Query query = Queryfactory.newQuery("get file in('/home/Bob')");
 List<Comparable> results = query.execute();
 ```
 
-##Syntaxe
+## Syntaxe
 
 General syntax :
 
@@ -33,9 +33,9 @@ General syntax :
 get [<limit>] [<distinct>] <attribute> in (<path> [deep <positiveNumber>] [, <path> [deep <positiveNumber>]]*) [having <conditions>] [sort by <property> ascending | descending];
 ```
 
-###Get clause
+### Get clause
 
-####Attributes
+#### Attributes
 Select the file attribute to return as a result of the query.
 
 * file : select the Java File object or full file or directory name (path + name)
@@ -52,8 +52,8 @@ Select the file attribute to return as a result of the query.
 * type : 'file' or 'directory' 
 
 
-####Restrictions
-#####Limit
+#### Restrictions
+##### Limit
 You can limit the number of results.
 
 ```
@@ -61,7 +61,7 @@ get 10 file in ('.');
 ```
 This query return the first ten files in the current directory. 
 
-#####Disinct
+##### Disinct
 If the distinct key word is specified, the query ensure that the result contains no doubles values.
 
 ```
@@ -69,7 +69,7 @@ get distrinct name in ('.');
 ```
 Get files or directories names with no double values.
 
-###In clause
+### In clause
 Sepcify with directories the query has to walk. Paths must be absolutes.
 
 ```
@@ -102,7 +102,7 @@ Of course, you can specify the deep clause by folder :
 get file in ('/opt' deep 1, '/home' deep 2);
 ```
 
-###Having clause
+### Having clause
 This clause specify with kind of file or directory the query can select (This part look like where SQL clause).
 
 Exemple : 
@@ -162,7 +162,7 @@ Complex query exemple :
 get content in ('.') having parent = 'logs' or (size > 0 and name like '.log') and type = 'file';
 ```
 
-####Sub queries
+#### Sub queries
 Having clause also support sub queries :
 
 ```
@@ -174,7 +174,7 @@ Get the bigest file in root with sub query. Of course, this exemple can be writt
 get 1 file in ('/' deep 1) having type = 'file' sort by size descending;
 ```
 
-###Sort by clause
+### Sort by clause
 Simple clause for sorting query result by a specific property.
 
 ```
@@ -196,8 +196,8 @@ You can sort on followings properties :
 
 Sort not working well for status as type property 
 
-###Functions
-####Aggregations Functions
+### Functions
+#### Aggregations Functions
 
 Aggregations functions is only supported in get clause : 
 * count (attribute)
@@ -215,7 +215,7 @@ count(1, 2, 3, 4);
 count(get file in('/'));
 ```
 
-####Functions
+#### Functions
 
 Those functions can be use in get or having clauses : 
 * asDate (value) : parse the specified value and return a date
