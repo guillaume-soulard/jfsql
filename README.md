@@ -2,35 +2,34 @@
 
 JFSQL (Java File System Query Language) is a Java library for querying the file system. This library provide a query language to allow external uses for exemple as shell command.
 
+## Command line
+
+For linux : 
+````shell
+./build.sh
+````
+Usage : 
+
 ```shell
 java -jar jfsql.jar "<query>"
 ```
 
-## Maven
-### Project dependency
-Work in progress
-### Build jar
+### As java library
 
-Run the following command to build a standalone jar library
+````xml
+TODO maven dependncy
+````
 
-```
-mvn clean compile assembly:single
-```
-Be careful, this command don't run any tests. To do that you have to run a 'clean install' or 'clean verify'
-
-## Usage
-Sample usage in a Java application :
 ```java
 Query query = Queryfactory.newQuery("get file in('/home/Bob')");
 List<Comparable> results = query.execute();
 ```
-
-## Syntaxe
+## Query syntaxe
 
 General syntax :
 
 ```
-get [<limit>] [<distinct>] <attribute> in (<path> [deep <positiveNumber>] [, <path> [deep <positiveNumber>]]*) [having <conditions>] [sort by <property> ascending | descending];
+GET [<limit>] [<distinct>] <attribute> IN (<path> [DEEP <positiveNumber>] [, <path> [DEEP <positiveNumber>]]*) [HAVING <conditions>] [SORT BY <property> ASCENDING | DESCENDING];
 ```
 
 ### Get clause
